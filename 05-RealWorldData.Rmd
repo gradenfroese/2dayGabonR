@@ -1,0 +1,656 @@
+---
+output: html_document
+editor_options: 
+  chunk_output_type: console
+---
+# Real world data
+We have now been through the basics of R and R studio. Today we apply it to a real world example - a camera trapping dataset collected at Osa Conservation. You will be confronted with real issues involved in preparing, exploring and analysing ecological data in R. 
+
+## Data organisation
+The more time I spend doing research, the more I realise that the majority of the problems we have performing data analysis can be solved with good organisation. When you are building your own data analysis data frame you should stick to my **the 10 database commandments**:
+
+### The 10 database commandments
+
+- **The survey data collected with the same protocol should never be split by site/person collecting it/month of the year.** Never ever split up datasets, it is a nightmare to fix. Have a column in the dataset that contains site ID/observer ID/Month instead. 
+
+- **One line = one statistical unit**. Do not pool data independent data into one line. In ecology, one statistical unit usually means one observation (i.e. spotting a species on a transect) - if you see two different species or two groups of the same species, use two lines. If you pool this data you going to waste time and losing important information.
+
+- **Never encode catagorical variables as 0 or 1**. You will need a key to figure out what they mean in the future! Just use the actual levels - ie. yes/no or inside/outside (e.g. protected areas)
+
+- **Your database should only include data - no empty filler cells to look nice!** Some people 'pretty up' their spreadhseet by including spaces... No thanks!
+
+- **Headers should only span one row**. R can not handle more... listen to R.
+
+- **Be consistent!** R treats the following as different: "Man", "man", " man", "man ". This is a hassle to clean up!
+
+- **Include units in the column headings**. There is nothing worse than characters included in a numerical column (e.g. 3 years) -> R will read it as a character string! 
+
+- **Don't record coordinates in degrees, minutes, seconds.** Decimal degrees are king. We are in the digital age - get out of the middle ages! 
+
+- **Headings should be consise, but still understandable**. No-one likes to type elephant$NameOfTheElephant every time they want to plot a graph. 
+
+- **Never use commas when recording data!**
+
+### My database setup
+
+I like to have four spreadhseets for each project: "data", "effort", "covariates", and "species info". Each sheet has at least one 'key' column to link it to data in other columns.
+
+  - **Data** is a database of the observations or captures of a species and the additional information you record when they are observed (e.g body size, group size etc). 
+  
+  - **Covariates** is a database containing the locations of your survey points, and any additional site-level information about those sites for the analysis (altitude, proximity to roads etc.) 
+  
+  - **Effort** is a database recording the sampling events. If you were doing observational transects you would record a unique id for each time you walked a transect. For camera trapping it would be each time you deployed a trap in the same location.
+  
+  - **Species info** is the sheet to link species codes in the main database to data about the species (e.g. latin names)
+
+## Osa data
+We will explore the OsaGrid dataset. I'll need your help to tell me basic summary information about this project and start the data exploration. I will (occasionally) give you some helpful hints. The idea is you apply some of the tools you learnt in the first two sessions to real world data!
+
+The data are from a terrestrial camera trapping survey conducted in four different habitats: primary, secondary, plantation and agricultural land.
+
+- OsaCTgrid_dat         # Keys = 'Code' and 'Station'
+
+- OsaCTgrid_covariates  # Keys = 'Station'
+
+- OsaCTgrid_effort      # Keys = 'Station'
+
+- OsaCTgrid_speciesinfo # Keys = 'Code'
+
+## Importing a dataframe into R from excel
+The only time I **ever** use excel is to enter my data. After today, you will hopefully be the same! Luckily, somebody has already entered this data for you. Check out the OsaCTgrid files, three of them are in .csv format, one of them, OsaCTgrid_data, is an excel file. R doesnt like excel files. We need to convert it first.
+
+Open the excel documents 'OsaCTgrid_data.xls'. 
+
+In excel, select File | Save as.. from the menu and navigate to the folder where you wish the file to be saved. Enter the file name (keep it the same for simplicity) in the ‘File name:’ dialogue box. In the ‘Save as Type:’ dialogue box click on the down arrow to open the drop down menu and select ‘csv (Comma delimited)’ as your file type. Select your R Project folder, the 'ClassData' folder and click Ok to save the file. Your file will now be saved as *OsaCTgrid_data.csv*.
+
+This file can now be read directly into R using the ``read.csv()`` function. 
+
+```{r}
+data <- read.csv("ClassData/OsaCTgrid_data.csv", header =T) # header = T tells R 
+                                                            # that the data has column titles
+```
+
+***TASK 11***
+***Read in the other files. call them ``effort``, ``covariates`` and ``sp.info``***
+
+***REMEMBER TO MAKE NOTES***
+
+```{r, echo=FALSE}
+effort       <- read.csv("ClassData/OsaCTgrid_effort.csv", header =T) # header = T tells are that the data has column titles
+covariates   <- read.csv("ClassData/OsaCTgrid_covariates.csv", header =T) # header = T tells are that the data has column titles
+sp.info <- read.csv("ClassData/OsaCTgrid_speciesinfo.csv", header =T) # header = T tells are that the data has column titles
+```
+
+## Effort exploration
+The first thing I like to do with a dataset is figure out how many surveys were performed. This information is stored in our ``effort`` datasheet.
+
+***TASK 12***
+***Explore the structure of the ``effort`` sheet. What can you tell me about it? How many camera traps were working when collected ('Status' column)? What are the other categories?*** 
+*Hint: use ``table()``* 
+
+```{r, echo=FALSE}
+head(effort)
+
+table(effort$Status) # 56 were working, 4 broke. 2 Sd cards problems, one error, and a breakage.
+```
+
+### Dealing with dates
+We need to find out how many nights each camera was running. We have a start date (``date_set``) and an end date (``date_collected``). What is the easiest way to find out the effort?
+
+R has an amazing ``lubridate`` package to make working with dates quick and easy. Read more about it here: <https://lubridate.tidyverse.org/>
+
+***Install the lubridate package***
+
+```{r, message=F}
+library(lubridate)
+```
+
+The way that lubridate works is it automatically detects the format of your date, as long as you tell it the order of the days, months and years. If your date object was 'y/m/d' you would use the ``ymd()`` command, if it is 'd/m/y' you use the ``dmy()`` command. 
+
+```{r}
+effort$start <- dmy(effort$date_set) # extract the date in d/m/y format
+```
+
+***TASK 13***
+***Repeat the same for the date collected, call it ``effort$end``. Use the ``head()`` function to check it worked***
+If it work it should look like this:
+```{r, echo=F}
+effort$end <- dmy(effort$date_collected)
+```
+
+```{r}
+head(effort)
+```
+
+Now to calculate the number of days the camera was functioning, we use the ``interval()`` command. The interval command works as ``interval(start, end)/desired.unit(1)``
+
+```{r, eval=FALSE}
+interval(effort$start, effort$end)/days(1) # days
+interval(effort$start, effort$end)/weeks(1) # weeks
+interval(effort$start, effort$end)/years(1) # weeks
+interval(effort$start, effort$end)/seconds(1) # seconds!
+
+```
+
+Great! The result in days is the most useful. Hang on... what are we forgetting? 
+
+***TASK 13***
+***Assign the result to a new column***
+
+```{r, echo=FALSE}
+effort$days <- interval(effort$start, effort$end)/days(1) # days
+```
+
+***TASK 14***
+***What is the mean amount of time a camera was active? What is the maximum and the minimum? Hint: use summary()***
+
+```{r}
+summary(effort$days)
+```
+
+### Remove cameras that did not function
+For this analysis we only want to analyse the camera stations which worked fully. 
+
+***TASK 15***
+***Remove the cameras which were not working by until the end of the project*** * Hint: use the [ , ]'s with a logic statement. 
+```{r, echo=FALSE}
+effort <- effort[effort$Status=="working",]
+```
+
+Check that your subset worked. You should now have only 56 cameras, all of which have "working" in the 'Status' column
+
+```{r}
+table(effort$Status)
+
+# Whenever you remove factors it is a good idea to "reset the levels"
+
+effort$Status <- factor(effort$Status)
+```
+
+***TASK 14***
+***Plot a boxplot of the amount of camera effort in the remaining camera stations***
+*Hint: use boxpolot()*
+```{r, echo=F, eval=FALSE}
+boxplot(effort$days)
+```
+
+## Covariate data
+We now need to see how the study is designed. The first thing to do is to explore the structure of the covariate dataframe. First, let's remove the cameras that did not work.
+
+***TASK 15***
+***Subset the ``covariates`` data frame to only include camera stations in the updated ``effort`` dataframe.*** *Hint: Use [,] with a ``%in%`` logical statment.*
+
+```{r, echo=FALSE}
+covariates <- covariates[covariates$Station %in% effort$Station,]
+```
+
+If your command worked, you should now only have 56 camera stations in you ``covariates`` file.
+
+***TASK 16***
+***Explore the ``covariates`` database using ``str()``***
+***What can you tell me about the covariate data frame?*** 1) How many columns do we have? 2) What format are the gps locations in? 3) How many cameras are located on/off trails? How many different habitats do we have?
+
+```{r,echo=FALSE, eval=F}
+head(covariates)
+```
+
+```{r, echo=FALSE}
+ncol(covariates) #12
+head(covariates$latitude) # D M S
+table(covariates$trail) # 45 off trail, 11 on trail 
+```
+
+Now lets check out the habitat types
+
+```{r}
+table(covariates$habitat_type)
+```
+**WHAT! 8 categories...! But you said that there were only 4!?!?!** We have two different problems here! Agricultural matrix is spelt with and without an '_' and there are some blank spaces after several of the plantation, primary and secondary catagories. R sees all.
+
+***TASK 17***
+***Enter the following code***
+
+```{r}
+# Dealing with the missing underscore - use logic to correct it
+
+# Replace "agricultural matrix" with "agricultural_matrix"
+covariates$habitat_type[covariates$habitat_type=="agricultural matrix"] <- 
+                                                                  "agricultural_matrix"
+
+# White space issues are very common, 
+# there is a little bit of code to deal with it trimws()!
+covariates$habitat_type <- trimws(covariates$habitat_type)
+
+# Check that it worked
+table(covariates$habitat_type)
+# Hooray!
+```
+
+### Plotting your survey sites - Substr()
+Plotting GPS coordinates in R is exactly the same as doing a normal scatter plot. However, the first thing you need to do is ensure that your data are in decimal degrees. Unfornuately ours are in degrees, minutes seconds. 
+
+The calculation to convert DMS to decimal degress is relatively simple: 
+
+*Decimal Degrees =  (Seconds/3600) + (Minutes/60) + Degrees. *
+
+However to extract the data from our colums we will have to master the substring command ``substr()``. First extract the first row of the ``covariates$latitude`` column and examine its structure.
+
+```{r}
+covariates$latitude[1]
+```
+If you count the number of latters from the first, the degree data are stored in the 2nd and 3rd characters, minutes in the 5th and 6th, and seconds data in the 8th-11th slots. ``substr()`` can extract these values ``substr(data, start position, end position)``.
+
+```{r}
+# example of substring
+substr(covariates$latitude[1], 2,3) # extract the second and third values (degrees)
+```
+
+***TASK 18***
+***What is the problem?***
+The number is actually a character string as it is surrounded by "" quatation marks. ***Convert it to numeric***
+
+Now we just plug the vlues into the equation (remembering to convert the output to ``as.numeric``).
+
+***Enter the following***
+
+```{r}
+covariates$Y = (as.numeric(substr(covariates$latitude, 8,11)) / 3600) + # seconds +
+               (as.numeric(substr(covariates$latitude, 5,6 ))  / 60) +  # minutes +
+                as.numeric(substr(covariates$latitude, 2,3 ))           # degrees
+```
+
+***TASK 19***
+***Do the same for the longitude data. assign it to column ``X``*** 
+*HINT: Be careful, the character positions change! And multiple by -1 as it is a "west" coordinate.*
+```{r, echo=FALSE}
+covariates$longitude[1]
+covariates$X = (as.numeric(substr(covariates$longitude, 9,12)) / 3600) + # seconds +
+               (as.numeric(substr(covariates$longitude, 6,7 ))  / 60) +  # minutes +
+                as.numeric(substr(covariates$longitude, 2,4 ))          # degrees 
+covariates$X <- covariates$X*-1 #To correct for the west coordinate!
+```
+
+Now we can do a standard scatter plot of our data.... with one difference. Whenever you map things in R you should lock the aspect ratio to 1 (``asp=1``) or the map will look strange!
+
+```{r, fig.width=3.5, fig.height=3.3}
+par(mfrow=c(1,2))
+plot(covariates$Y~covariates$X, pch=19,asp=1) 
+plot(covariates$Y~covariates$X, pch=19) 
+
+```
+
+***TASK 20***
+***Smarten up your graph! Try adding separate shapes for each different habitat*** 
+*Hint: start with a blank plot (``type="n"``), then sequentially add the points for the different habitats using ``points()`` and the logic statement covariates$Habitat_type==*  
+Try to make something like this:
+
+```{r, fig.width=4.5, fig.height=4, echo=F}
+plot(covariates$Y~covariates$X, type="n", las=1, asp=1, ylab="", xlab="")
+points(covariates$Y[covariates$habitat_type=="primary"]~covariates$X[covariates$habitat_type=="primary"], 
+       pch=19, col="springgreen3")
+points(covariates$Y[covariates$habitat_type=="secondary"]~covariates$X[covariates$habitat_type=="secondary"],
+       pch=18, col="orchid")
+points(covariates$Y[covariates$habitat_type=="plantation"]~covariates$X[covariates$habitat_type=="plantation"],
+       pch=17, col="gold1")
+points(covariates$Y[covariates$habitat_type=="agricultural_matrix"]~covariates$X[covariates$habitat_type=="agricultural_matrix"],        pch=15, col="red2")
+```
+
+It is relatively simple to add shape files to plots like these using the "Simple Features" package. All the clever ways to use the Simple Features would be a couse in itself. Now lets just use it to make a nice graph.
+
+***The first step is to load the package and the shapefiles***
+```{r results='hide', message=FALSE}
+library(sf)
+trails    <- st_read("ClassData/Map Files/Trails.shp", stringsAsFactors = F)
+roads     <- st_read("ClassData/Map Files/Roads.shp", stringsAsFactors = F)
+rivers    <- st_read("ClassData/Map Files/Rivers.shp", stringsAsFactors = F)
+country   <- st_read("ClassData/Map Files/Country.shp", stringsAsFactors = F)
+
+```
+
+When making maps, it is best to start the plot with the survey sites, then add the layers on top. This is the esiest way to ensure that the plot window is appropriately sized.
+
+To plot Simple Features shapefiles you need to specify that you want to plot the geometry of the object: st_geometry. See below:
+
+```{r, fig.width=4.5, fig.height=4, echo=F}
+# Start with the survey points
+plot(covariates$Y~covariates$X, las=1, asp=1, ylab="", xlab="")
+
+# Add the land (The points will dissapear, we will add them in later)
+plot(st_geometry(country), add=T, col="grey94")
+
+# Add the trails - lty makes them dashed
+plot(st_geometry(trails), add=T, lty=2)
+
+# Add the rivers
+plot(st_geometry(rivers), add=T, col="lightskyblue", lwd=2)
+
+# Add the roads - left off for clarity!
+#plot(st_geometry(roads), add=T)
+
+
+# Now re-add your nice points
+points(covariates$Y[covariates$habitat_type=="primary"]~covariates$X[covariates$habitat_type=="primary"], 
+       pch=19, col="springgreen3")
+points(covariates$Y[covariates$habitat_type=="secondary"]~covariates$X[covariates$habitat_type=="secondary"],
+       pch=18, col="orchid")
+points(covariates$Y[covariates$habitat_type=="plantation"]~covariates$X[covariates$habitat_type=="plantation"],
+       pch=17, col="gold1")
+points(covariates$Y[covariates$habitat_type=="agricultural_matrix"]~covariates$X[covariates$habitat_type=="agricultural_matrix"],        pch=15, col="red2")
+
+# Add back in the axes!
+axis(1,c(-1000,1000)); axis(2,c(-1000,1000));axis(3,c(-1000,1000)); axis(4,c(-1000,1000))
+
+```
+
+
+
+### Explore your covariates 
+We have 7 covariates in this data which could explain some variation in mammal abundance detected on camera traps. We should explore them.
+
+***TASK 21***
+*** How are the covariates river dist, ocean_dist, road_dist, altitude, canopy_cover, and canopy_height related to one another?*** 
+*Hint: Use the ``corrplot`` package to calculate the covariance between the explanatory variables.* 
+What do you think about the correlations? Are we worrid about anything?
+
+```{r, echo=F, message=F}
+library(corrplot)
+corr <- cor(covariates[,6:12])
+corrplot(corr,
+         type="upper",
+         method="number")
+```
+
+## Camera trap data
+We will now clean and look at the camera trap data.
+
+***TASK 22***
+***Remove the data from the cameras that did not work until the end***
+
+*** Remove the data from the cameras which did not survive until the end of the study.***
+
+```{r, echo=F}
+data <- data[data$Station %in% effort$Station,]
+```
+
+***TASK 23**
+***Have a look at the structure of the ``data`` dataframe and tell me what you see.*** How many observations do we have in the camera trap dataframe? How many different species classifications do we have? *Hint* use ``nrow()`` to find out how many rows are in ``data``.  
+
+```{r, eval=FALSE, echo=FALSE}
+nrow(data) #11906
+length(unique(data$Code)) #55
+```
+
+A useful comman to know is ``as.dataframe()`` as it can turn a table output, into a more easily observable dataframe.
+
+***TASK 24***
+***Run the following code***
+```{r, eval=FALSE}
+det.freq <- as.data.frame(table(data$Code)) # Make a table into a dataframe
+
+```
+
+You dataframe should look like this (but longer):
+
+```{r, echo=FALSE}
+det.freq <- as.data.frame(table(data$Code)) # Make a table into a dataframe
+det.freq[1:12,]
+```
+
+Doing this we can see that we have some issues. Agouti appears twice ("agouti" and "Agouti"), and coati appears twice as ("Coati" and "coati"). Luckily there is a nice command to deal with this ``tolower()``!
+
+***TASK 25***
+***Convert the errors to lowercase***
+```{r}
+data$Code <- tolower(data$Code)    
+```
+
+```{r, eval=FALSE}
+# Always check you code has worked!
+as.data.frame(table(data$Code))[1:10,]
+length(unique(data$Code)) # 53 species classification
+```
+
+### Subsetting you data to only include species of interest.
+As you have seen, we have 54 different species classifications, but some of those are birds, humans, even 'bike'. This is where the ``sp.info`` dataframe comes in.
+
+***TASK 26***
+***Explore the structure of the sp.info dataframe***
+
+```{r, echo=F}
+head(sp.info)
+unique(data$Code)
+
+```
+
+For this analysis, we want to subset the data to just mammals, which are native, and can be identified to genus level.
+
+***TASK 27***
+***Write a line of code which allows us to subset ``sp.info`` to a new dataframe called ``focal.info`` based off the above criteria.*** 
+*Hint: use ``[,]`` and multiple logic statements linked by the '&' sign. Remember, to deal with NA's you will need to do the 'is.na()' command.* 
+
+```{r, echo=FALSE}
+sp.focal <- sp.info[sp.info$Mammal=="yes" & sp.info$Native=="yes" & is.na(sp.info$Species)==F,] 
+nrow(sp.focal) # should now be 21 species
+```
+If you have performed your operation correctly, your sp.focal dataset should contain 21 species. 
+
+*** Now subset the ``data`` dataframe to only contain the species in your '``focal.info`` database. Assign it to a new dataset - final.data ***
+
+```{r, echo=FALSE}
+final.data <- data[data$Code %in% sp.focal$Code,]
+final.data$Station <- factor(final.data$Station) 
+head(final.data)
+```
+
+### Extracting time and date information
+When ever you have observatiosn you should record the times and dates. We dont currently have that information in the ``final.data`` dataframe.
+
+In the ``effort`` sheet we extracted date information using ``lubridate()``. We can do exactly the same thing here as the dates and times are embedded in the filenames column ``final.data$Name``.
+
+```{r}
+final.data$Name[1]
+```
+Examining the first element in the dataframe you can see that the first 19 characters contain the the date and time information in the format 'Y-m-d H.M.S'. 
+
+***TASK 28*** 
+*** Write a command to extract the first 19 characters from ``final.data$Name``.
+*Hint: use substr()*
+
+***Next, convert that object to an R date column called ``final.data$Date`` using lubridate -  ``ymd_hms()``***
+
+```{r, echo=FALSE}
+library(lubridate)
+final.data$Date <- ymd_hms(substr(final.data$Name,1,19))
+```
+
+If you have run the code correctly the top of you dataset should now look like this:
+
+```{r}
+head(final.data)
+```
+
+We can use this information to explore animal activity patterns. To do that we need to extract the an "hour" column from the ``final.data$Date`` information. Lubridate makes this nice and easy.
+
+```{r}
+final.data$Hour <- hour(final.data$Date) + minute(final.data$Date)/60 
+```
+
+***TASK 29***
+***Plot a histogram of of the times recorded in the hour category and specify hourly breaks.*** What can you tell me about when animals are usually captured? 
+*Hint: use ``hist`` for the plot and ``seq()`` to determine the breaks.*
+```{r,echo=FALSE, eval=FALSE}
+hist(final.data$Hour,                            # Specify the data
+     breaks=seq(0,24,1),                         # Specify the breaks
+     main = "Hourly mammal detection frequency", # change the title 
+     las=1,                                      # Rotate the y axis labels (essential!!!!)
+     xlab="Hour")                                # Label the x-axis
+```
+
+***TASK 30***
+*** Repeat this graph using the data for two species of your choice. Try a diurnal mammal and a nocturnal mammal (paca, possum_foureyed. Share your graphs with the class***
+*Hint: subset the data using the [,] and a logic statement e.g. final.data$Hour[final.data$Code=="tapir"]. Remember to change the title! Edit the code below. 
+
+```{r, echo}
+hist(final.data$Hour[final.data$Code=="tapir"],  # Specify the data
+     breaks=seq(0,24,1),                         # Specify the breaks
+     main = "Tapir detection frequency", # change the title 
+     las=1,                                      # Rotate the y axis labels (essential!!!!)
+     xlab="Hour")                                # Label the x-axis
+
+```
+
+## Building analysis dataframes
+So far we have explored our four different datasheets, but now we need to build the final analysis dataframes. To do that we need to decide what we want to study, and then define what out statistical unit is.
+
+***TASK 31***
+***Come up with some questions to ask***
+
+### Relative abundance
+
+we could hypothesise that the more degraded a habitat is, the fewer animals you will find there. We have four habitat types so we might think that:
+
+Primary > Secondary > Plantation > agricultural_matrix
+
+As we are interested in the abundance of mammals in the different habitats, I could just add up all of the detections of a given species in a habitat, and compare those between habitat types. ***Is there a problem with that?***
+
+Remember the camera effort boxplot from earlier:
+
+```{r, fig.width=3}
+boxplot(effort$days,ylab="Camera trap days", las=1)
+summary(effort$days)
+```
+
+Some cameras were active for 110 days, th rest for less. If we were to just add up the number of captures, the cameras with half the amount of effort will have half as many captures, regardless of that habitat they are in.
+
+Consequently, we need to standardise our counts to **relative abundance** of mammals: the number of detections per unit time (usually 100 camera trap days). Fortunately, this is relatively simple:
+
+For each camera ->   sum(all detections) / effort.days * 100 
+
+The steps we need to take are:
+
+1) Summarise the ``data`` file to count every observation and store it in a new dataframe
+
+2) Merge the count data with the ``effort`` file - so we can calculate the relative abundance index
+
+3) Merge the new count data file with the ``covariates`` file so we can explore how our covariates influence mammal abundance.
+
+In this case the "statistical unit" we are interested in (remember point 2 of the 9 commandments) is the camera. So we want to summarise this data so that one row = one camera station.
+
+### Step 1: Summarise
+There are some very simple functions in the ``dplyr`` to summarise data. the ``summarize()`` function is a good one to know.
+
+The ``summarize()`` function works by summarize(group_by(data, group 1, group 2 etc), "column name" = the action you want to perform)
+
+We will produce the summary for each species:
+
+```{r}
+library(reshape2)
+final.data$Code<- factor(final.data$Code)
+
+count.sp <- melt(table(final.data$Station, final.data$Code))
+colnames(count.sp) <- c("Station", "Code", "Count")
+head(count.sp)
+```
+
+If you performed this operation correctly it should look like the following:
+
+```{r}
+head(count.sp)
+```
+
+### Step 2: Merge with effort
+Next we need to merge our data with the effort data.
+To merge with the effort sheet we can use the ``Station`` key and the ``left_join()`` command. We dont want to use all the columns in the ``effort`` sheets as things will get messy. Lets subset it first:
+
+```{r, eval=FALSE}
+# First subset the effort file to just the columns you want to merge - 'Station' and 'days'
+effort[, c("Station", "days")] # literally, give me all rows, 
+#but just the station and days columns
+
+# Join your reduced data frame with the count data
+count.sp <- left_join(count.sp, effort[, c("Station", "days")], by="Station")
+
+```
+
+```{r, echo=FALSE, message=FALSE}
+# First subset the effort file to just the columns you want to merge - 'Station' and 'days'
+effort[, c("Station", "days")][1:10,] # literally, give me all rows, but just the station and days columns
+library(dplyr)
+# Join your reduced data frame with the count data
+count.sp <- left_join(count.sp, effort[, c("Station", "days")], by="Station")
+
+```
+Your final job is to calculate the **R**elative **A**bundance **I**ndex or **RAI**.
+
+For ``count.sp``, we need to divide the counts by the number of trapping days and times it by 100 (to get the number of captures per 100 days). 
+
+```{r}
+count.sp$RAI <- count.sp$Count/count.sp$days * 100
+# all of those decimal places are annoying... remove them using round()
+count.sp$RAI <- round(count.sp$RAI,2)
+```
+
+### Step 3: Merge the covariates
+So we now have a dataset on relative abundance index which we want to analyse, but we dont have any information about the sites themselves. We need to add the covariate data. To use column names on all of these would take a long time, we can use numbers instead. The columns we want are: 1 = station, then 4:12 (the covariates: habitat_type:canopy height).
+
+```{r, eval=FALSE}
+# Check the covariate subset 
+covariates[,c(1,4:12)] # I have all the columns I want
+```
+
+***TASK 35***
+***Perform the ``left_join`` but with covariate data.***
+
+```{r, echo=F, message=F}
+count.sp  <- left_join(count.sp , covariates[, c(1,4:14)], by="Station")
+```
+All being well your dataset should now look like this:
+```{r}
+head(count.sp)
+```
+We will also make a site*species matrix so we can explore relationships between multiple different species.
+
+```{r}
+count.mat <- dcast(count.sp, Station  ~ Code,value.var ="Count", fun.aggregate=sum, drop=FALSE)
+
+```
+
+
+
+Save the count.sp dataset for later.
+
+```{r}
+write.csv(count.sp, "SpeciesRAIdata.csv", row.names=F)
+write.csv(count.mat, "SpeciesMATRIXdata.csv", row.names=F)
+
+```
+
+**We are now ready for some proper data exploration**
+
+## Real data exploration
+
+***Team Task***
+I have never analysed this data, I have no idea what it will tell us. 
+
+***Break into groups and summarise the data in these datasets.***
+
+Questions:
+
+- What are the most commonly detected species?
+
+
+Hints:
+- Scatterplots of continuous variables with RAI (``plot()``)
+- Boxplots of catagorical variables with RAI (``boxplot()``)
+- Boxplots of catagorical covariates with Habitat_type (``boxplot``)
+
+```{r, eval=FALSE, echo=FALSE}
+# Make a observed richness dataset
+
+library(reshape2)
+library(dplyr)
+
+rich.all <- melt(table(count.sp$Station[count.sp$Count>0]))
+colnames(rich.all) <- c("Station", "Richness")
+rich.all <- left_join(rich.all, covariates[, c(1,4:14)], by="Station")
+```

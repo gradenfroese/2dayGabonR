@@ -1,0 +1,54 @@
+Code,Mammal,Native,Species
+agouti,yes,yes,Dasyprocta punctata
+ants_army,no,yes,NA
+armadillo_ninebanded,yes,yes,Dasypus novemcinctus
+bike,no,no,NA
+bird_large_uid,no,yes,NA
+bird_small_uid,no,yes,NA
+broken,no,no,NA
+capuchin_whitefaced,yes,yes,Cebus capucinus
+caracara_crested,no,yes,NA
+coati,yes,yes,Nasua narica
+cow,yes,no,NA
+curassow_great,no,yes,NA
+dog,yes,no,NA
+egret_cattle,no,yes,NA
+forestfalcon_collared,no,yes,NA
+grison,yes,yes,Galictis vittata
+guan_crested,no,yes,NA
+hawk_roadside,no,yes,NA
+heron_barethroatedtiger,no,yes,NA
+horse,yes,no,NA
+horse_ridden,yes,no,NA
+ibis_white,no,yes,NA
+iguana_green,no,yes,NA
+jaguar,yes,yes,Felis onca
+jaguarundi,yes,yes,Felis yaguaroundi
+lizard_uid,no,yes,NA
+mammal_small_uid,yes,yes,NA
+margay,yes,yes,Felis wiedii
+motmot_bluecrowned,no,yes,NA
+nothing,no,no,NA
+ocelot,yes,yes,Felis pardalis
+opossum_common,yes,yes,Didelphis marsupialis
+opossum_foureyed,yes,yes,Philander opossum
+opossum_uid,yes,yes,NA
+opossum_water,yes,yes,Chironectes minimus
+paca,yes,yes,Agouti paca
+peccary_collared,yes,yes,Dicotyles tajacu
+peccary_whitelipped,yes,yes,Tayassu pecari
+people,yes,No,NA
+puma,yes,yes,Felis concolor
+raccoon,yes,yes,Procyon sp.
+scorpion_bark,no,yes,NA
+setup,no,no,NA
+skunk_striped,yes,yes,Conepatus semistriatus
+squirrel_uid,yes,yes,NA
+tamandua,yes,yes,Tamandua mexicana
+tapir,yes,yes,Tapirus bairdii
+tayra,yes,yes,Eira barbada
+tinamou_great,no,yes,NA
+tinamou_little,no,yes,NA
+uid,no,no,NA
+vulture_black,no,yes,NA
+woodrail_greynecked,no,yes,NA

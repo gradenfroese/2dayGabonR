@@ -1,0 +1,255 @@
+# Introduction to Modelling
+
+Make a new R script called - "Introduction to Modelling", give it a title and import the data we will use.
+
+```{r, eval=T}
+
+# Title: Linear modelling in R
+
+# Read in the covariates dataframe
+covariates <- read.csv("ClassData/OsaCTgrid_covariates.csv", header =T)
+```
+
+## Is canopy height related to habitat type at Osa?
+
+Subset the ‘covariate’ data to just “primary” and “habitat_type”:
+
+```{r}
+# Subset the data to just primary and agricultural_matric habitats
+hdat <- covariates[covariates$habitat_type=="primary" | 
+                     covariates$habitat_type=="agricultural_matrix", ]
+
+# Reset the factor levels:
+hdat$habitat_type <- factor(hdat$habitat_type)
+```
+
+### What is a model
+When we are "modelling" we are fitting functions to the data in order to explain them. A good model will always explain more information than a bad model, but will not be so complicated that we cannot interperate it. *Remember, we are not trying to recreate reality, we are trying to explain reality.*
+
+On the left is an example of a null model, canopy height does not vary by habitat type (a single intercept), and on the right is a model where the intercept varies by habitat type (an alternate model - more on that later). We determine how much variation a model explains by measuring the 'sums of squares' - the squared distance (dashed lines) from our model (line) to the actual data (points). The more complicated model has a lower sums of squares, so it explains more information!
+
+```{r, echo=FALSE}
+# Catagorical covariate
+hdat <-  hdat[sample(nrow(hdat)),]
+hdat$index <- 1:27
+
+# Global average
+par(mfrow=c(1,2))
+plot(hdat$canopy_height, ylab="Tree Height (m)",main="Null Model", las=1, ylim=c(0,25), pch=19, col=rgb(0.2,0.2,0.2, 0.5), xlim=c(0,30), xlab="Sums of Squares = 795")
+abline(h=mean(hdat$canopy_height), lty=1)
+for(i in 1:nrow(hdat))
+{
+  lines(c(i,i), c(hdat$canopy_height[i],mean(hdat$canopy_height)), lty=2 )
+}
+
+plot(hdat$canopy_height[hdat$habitat_type=="primary"]~hdat$index[hdat$habitat_type=="primary"], ylab="Tree Height (m)", las=1, ylim=c(0,25), pch=19, col=rgb(0.2,0.9,0.4), xlim=c(0,30), main="Alternative Model", xlab="Sums of squares = 384")
+abline(h=mean(hdat$canopy_height[hdat$habitat_type=="primary"]), lty=1, col=rgb(0.2,0.9,0.4))
+for(i in 1:nrow(hdat[hdat$habitat_type=="primary",]))
+{
+  lines(c(hdat$index[hdat$habitat_type=="primary"][i],hdat$index[hdat$habitat_type=="primary"][i]), c(hdat$canopy_height[hdat$habitat_type=="primary"][i],mean(hdat$canopy_height[hdat$habitat_type=="primary"])), lty=2 , col=rgb(0.2,0.9,0.4))
+}
+# Plantation
+points(hdat$canopy_height[hdat$habitat_type=="agricultural_matrix"]~hdat$index[hdat$habitat_type=="agricultural_matrix"], pch=19, col=rgb(0.9,0.2,0.4))
+abline(h=mean(hdat$canopy_height[hdat$habitat_type=="agricultural_matrix"]), lty=1, col=rgb(0.9,0.2,0.4))
+for(i in 1:nrow(hdat[hdat$habitat_type=="agricultural_matrix",]))
+{
+  lines(c(hdat$index[hdat$habitat_type=="agricultural_matrix"][i],hdat$index[hdat$habitat_type=="agricultural_matrix"][i]), c(hdat$canopy_height[hdat$habitat_type=="agricultural_matrix"][i],mean(hdat$canopy_height[hdat$habitat_type=="agricultural_matrix"])), lty=2 , col=rgb(0.9,0.2,0.4))
+}
+
+
+
+```
+
+
+### The P-value
+The problem with just looking at sums of squares is that the more complicated a model is... the more variation it explains. So instead we sometimes use p-values to compare the two alternative models. P-values measure the probability the difference between the null model and the alternative model came about by chance, but only after paying a penalty for how complex the models are (via degrees of freedom - don't worry about this right now).
+
+Lets run a linear  model and see what we get:
+
+```{r}
+mod1 <- lm(canopy_height~habitat_type,data=hdat)
+summary(mod1)
+aov(mod1)
+```
+
+If you examine the P-value in the table for the ``habitat_typeprimary`` category you will see that it is very small, which suggests that the two habitats do indeed have different canopy heights! Great!
+
+Next we need to check if our models fit the assumptions of a liner model, those assumptions are:
+
+- **Residuals are independent of each other** Each sample sould be an independent from all the other samples (the result of one should not influence the result of another).
+
+- **The explanatory variable X is measured without error** Your measure of the explanatory variable should be exact, in reality this is very difficult to do!
+
+- **The residuals of the model are normal** For any given value of X, the sampled Y values normally distributed errors arround the model fit.
+
+- **The resudials have constant variability** The model fits the data equally well across the full span of your explanatory variables (homoscedascity = constand variability; heteroscedacity = varying heteroscedacity).
+
+The first two are difficult to test, but the secon two can be check through plotting th model object:
+
+```{r}
+par(mfrow=c(2,2)) # chnage to plot window to allow 4 plots
+plot(mod1)
+```
+
+Look at the first two plots. The top left plot shows that the model fits each category equally well (the red line is flat), the top right plot shows that the residuals are normal (the points follow the dashed line). The bottom two plots help with outlier identification, don't worry about these for now!
+
+So our model looks reasonable. Let's do another example.
+
+## Are Coatis more abundant in close proximity to the ocean
+Now lets fit a different model using the capture data from the Osa grid. Coatis are well known to raid turtles nests for food, for this reason we might expect that coatis are more frequently detected close to the ocean. Let's see if this is the case.
+
+First, let's import our relative abundance index dataset from earlier ()
+
+```{r}
+# Read in the dataframe
+count.sp <- read.csv("SpeciesRAIdata.csv", header=T)
+
+# Subset the data to just coatis
+coati <- count.sp[count.sp$Code=="coati",]
+```
+
+First lets plot the data:
+
+```{r}
+par(mfrow=c(1,1))
+plot(coati$RAI~coati$ocean_dist, pch=19, col="pink", ylab="RAI",
+     xlab= "Ocean Distance (m)", las=1)
+
+```
+
+Fit the linear models, m1 = capture rate varies by ocean distance:
+
+```{r}
+m1 <- lm(RAI~ocean_dist, data=coati)
+summary(m1)
+
+```
+If we examine the p-value for ``ocean_dist`` in the m1 model, you can see it is significant (0.00277), suggesting it performs better than the null model (capture rate does not vary by ``ocean_dist``).
+
+Let's check how the model fits the data.
+
+```{r}
+par(mfrow=c(2,2))
+plot(m1)
+```
+The top left plot suggests that the model does not fit very well. It is under estimating coati abundance in close proximity to the ocean, over estimating it at intermediate distances, and underestimating it again at far distances. 
+
+The top right plot also suggests that our residuals are not normally distributed.
+
+Let's plot the model prediction to see if this is the case:
+
+```{r}
+coef(m1) # Pulls out the intercept and slope parameters for the model. 
+
+par(mfrow=c(1,1))
+plot(coati$RAI~coati$ocean_dist, pch=19, col="pink", ylab="RAI",
+     xlab= "Ocean Distance (m)", las=1)
+
+abline(coef(m1), col="black") # plots the line
+
+```
+
+Our fitted model fits the description above - it isnt performing very well across the whole range of ocean distance.
+
+Lets try a quadratic shape for the line:
+
+```{r}
+m2 <- lm(RAI~ocean_dist + I(ocean_dist^2), data=coati)
+summary(m2)
+
+```
+
+The quadratic term is also significant! Interesting. Lets check the model assumptions.
+
+```{r}
+par(mfrow=c(2,2))
+plot(m2)
+
+```
+
+They look better than before, the top left plot looks much more like a "sky at night".
+
+Now lets plot the model predictions. the ``abline()`` command we used earlier can only handle straight lines, so our code will have to be more complex:
+
+```{r}
+par(mfrow=c(1,1))
+plot(coati$RAI~coati$ocean_dist, pch=19, col="pink", ylab="RAI", 
+     xlab= "Ocean Distance (m)", las=1)
+lines(predict.lm(m2)[order(coati$ocean_dist)]~ coati$ocean_dist[order(coati$ocean_dist)],
+      type="l", col="black")
+
+```
+That looks great! But now the question becomes... is it better than model 1? Both have significant variables in, but you can't compare the p-values. Instead we will use information criterion, or AIC. when doesnt an AIC comparison the **lower** number is always better. The lower the number, the more information a model explains (after paying a cost for how complex it is).
+
+```{r}
+AIC(m1,m2)
+```
+The m2 model has a lower AIC - by a long way (many people assume AICs>2 to reflect a 95% difference). 
+
+Congratulations - you have performed your first round of model selection!  
+
+### Comparing multiple predictors of Coati detections
+
+We have several variables which may influence Coati detects. What if we want to found out this is the most important? Again we can use AIC to perform this. The potential predictors we have identified are: river distance, ocean distance, road distance, trail distance, altitude and canopy cover. First fit every model individually, then use the MuMIn package to compare the results: 
+
+```{r, warning=F}
+n1 <- lm(RAI~river_dist, data=coati)
+n2 <- lm(RAI~ocean_dist, data=coati)
+n3 <- lm(RAI~road_dist, data=coati)
+n4 <- lm(RAI~trail_dist, data=coati)
+n5 <- lm(RAI~altitude, data=coati)
+n6 <- lm(RAI~canopy_cover, data=coati)
+
+library(MuMIn)
+
+model.sel(n1,n2,n3,n4,n5,n6)
+
+```
+
+So the ocean distance variable is the best supported predictor! Phew! 
+
+***Task: Try this process with a different animal. Do you get the same result?***
+
+
+That is all for now. For more information check out:
+
+**Statistics: an introduction using R - Micheal Crawley**
+
+**The R Book - Micheal Crawley**
+
+
+```{r, echo=FALSE, eval=FALSE}
+## Modelling community structue
+We can compare community structure between the habitat types using a PCA. 
+
+Load your matrix dataset to do this:
+
+# We will need three packages
+library(dplyr)
+library(vegan)
+library(ggbiplot)
+
+# Read in the dataframe
+count.mat <- read.csv("SpeciesMATRIXdata.csv", header=T)
+
+# make the data 
+pca.dat <- left_join(count.mat, covariates) # join with covariates
+colnames(pca.dat)
+sp <- pca.dat[,2:22] # make a siteX species matix
+covs  <- pca.dat[, 23:33] # make a site x covariate matric
+
+# Run the pca
+pca  <- prcomp(sp, scale=FALSE)
+
+ggbiplot(pca, var.axes = T, groups=covs$habitat_type) + theme_classic()+  theme(legend.position = 'none')
+
+
+
+```
+
+
+
+
+
+
+
