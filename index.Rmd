@@ -1,0 +1,36 @@
+--- 
+title: "R: an introduction to data management and analysis"
+author: "Chris Beirne"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+output: bookdown::gitbook        #pdf_book
+geometry: margin=2.5cm
+documentclass: book
+bibliography: [book.bib, packages.bib]
+biblio-style: apalike
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+description: "The handbook for the Osa Conservation R and biodiversity analysis course."
+---
+
+# Preface
+
+R has changed the way we manage and analyse data. It is fast, open source and free. You can analyse data in R, produce maps, create art... I even wrote, formatted and printed this handout in R! Hopefully the next few days will be the start of your relationship with R. You'll have to work at it, you will definately go through some rough patches, but in the end I promise it will be worth it. 
+
+The information included in this book is based on my own experience and understanding of what you will require when taking your first steps into the world of R. I have tried to make it as simple and as accessible as possible. It will ideally serve as a primer for you to build on in future months and years. Where appropriate, I point you to additional resources and learning material. This booklet is by no means exhaustive, but it will, I hope, be useful. Remember, learning R is like learning a language - if you don’t use it you will lose it. Keep practicing.
+
+It is also important to note that **this is not a comprehensive R manual or an introductory statistics course**. If you are looking for those I recommend downloading and working through the following:
+
+Alex Douglas taught me R, and he (and friends) can teach you too: <https://intro2r.com/>! 
+
+The R Book - Micheal Crawley
+
+Statistics: an introduction using R - Micheal Crawley
+
+Analysis of Biological Data - Whitlock and Schluter:
+
+And check out this website for aweseome (free) resources: <https://r-dir.com/learn/e-books.html>
+
+Want to learn R like a pirate? If the answer is YaRrr go to <https://bookdown.org/ndphillips/YaRrr>  
+
+Good luck, enjoy yourself, and most importantly - **if I ever see or hear of you making a graph in excel again there will be trouble!**

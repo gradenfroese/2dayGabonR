@@ -1,0 +1,926 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>4 Advanced coding | R: an introduction to data management and analysis</title>
+  <meta name="description" content="The handbook for the Osa Conservation R and biodiversity analysis course." />
+  <meta name="generator" content="bookdown 0.17 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="4 Advanced coding | R: an introduction to data management and analysis" />
+  <meta property="og:type" content="book" />
+  
+  
+  <meta property="og:description" content="The handbook for the Osa Conservation R and biodiversity analysis course." />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="4 Advanced coding | R: an introduction to data management and analysis" />
+  
+  <meta name="twitter:description" content="The handbook for the Osa Conservation R and biodiversity analysis course." />
+  
+
+<meta name="author" content="Chris Beirne" />
+
+
+<meta name="date" content="2020-12-11" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="r-basics.html"/>
+<link rel="next" href="real-world-data.html"/>
+<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+
+
+
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Preface</a></li>
+<li class="chapter" data-level="2" data-path="setup.html"><a href="setup.html"><i class="fa fa-check"></i><b>2</b> Setup</a><ul>
+<li class="chapter" data-level="2.1" data-path="setup.html"><a href="setup.html#notation"><i class="fa fa-check"></i><b>2.1</b> Notation</a></li>
+<li class="chapter" data-level="2.2" data-path="setup.html"><a href="setup.html#download-and-open-r"><i class="fa fa-check"></i><b>2.2</b> Download and open R</a></li>
+<li class="chapter" data-level="2.3" data-path="setup.html"><a href="setup.html#download-and-open-r-studio"><i class="fa fa-check"></i><b>2.3</b> Download and open R Studio</a></li>
+<li class="chapter" data-level="2.4" data-path="setup.html"><a href="setup.html#setting-up-r-studio-to-be-productive"><i class="fa fa-check"></i><b>2.4</b> Setting up R Studio to be productive</a><ul>
+<li class="chapter" data-level="2.4.1" data-path="setup.html"><a href="setup.html#r-projects"><i class="fa fa-check"></i><b>2.4.1</b> R Projects</a></li>
+<li class="chapter" data-level="2.4.2" data-path="setup.html"><a href="setup.html#create-a-data-sheet-to-save-your-code"><i class="fa fa-check"></i><b>2.4.2</b> Create a data sheet to save your code</a></li>
+<li class="chapter" data-level="2.4.3" data-path="setup.html"><a href="setup.html#name-your-files"><i class="fa fa-check"></i><b>2.4.3</b> Name your files</a></li>
+</ul></li>
+<li class="chapter" data-level="2.5" data-path="setup.html"><a href="setup.html#first-steps"><i class="fa fa-check"></i><b>2.5</b> First Steps</a><ul>
+<li class="chapter" data-level="2.5.1" data-path="setup.html"><a href="setup.html#veiwing-data"><i class="fa fa-check"></i><b>2.5.1</b> Veiwing Data</a></li>
+<li class="chapter" data-level="2.5.2" data-path="setup.html"><a href="setup.html#data-summaries"><i class="fa fa-check"></i><b>2.5.2</b> Data summaries</a></li>
+<li class="chapter" data-level="2.5.3" data-path="setup.html"><a href="setup.html#plot-your-data"><i class="fa fa-check"></i><b>2.5.3</b> Plot your data</a></li>
+<li class="chapter" data-level="2.5.4" data-path="setup.html"><a href="setup.html#test-your-hypotheses"><i class="fa fa-check"></i><b>2.5.4</b> Test your hypotheses</a></li>
+<li class="chapter" data-level="2.5.5" data-path="setup.html"><a href="setup.html#regression-analysis"><i class="fa fa-check"></i><b>2.5.5</b> Regression analysis</a></li>
+<li class="chapter" data-level="2.5.6" data-path="setup.html"><a href="setup.html#congratulations"><i class="fa fa-check"></i><b>2.5.6</b> Congratulations</a></li>
+</ul></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="r-basics.html"><a href="r-basics.html"><i class="fa fa-check"></i><b>3</b> R Basics</a><ul>
+<li class="chapter" data-level="3.1" data-path="r-basics.html"><a href="r-basics.html#quick-glossary"><i class="fa fa-check"></i><b>3.1</b> Quick Glossary</a></li>
+<li class="chapter" data-level="3.2" data-path="r-basics.html"><a href="r-basics.html#objects-and-functions"><i class="fa fa-check"></i><b>3.2</b> Objects and functions</a></li>
+<li class="chapter" data-level="3.3" data-path="r-basics.html"><a href="r-basics.html#r-as-a-calculator"><i class="fa fa-check"></i><b>3.3</b> R as a calculator</a></li>
+<li class="chapter" data-level="3.4" data-path="r-basics.html"><a href="r-basics.html#assigning-single-values-a.k.a.-scalars"><i class="fa fa-check"></i><b>3.4</b> Assigning single values (a.k.a. scalars)</a></li>
+<li class="chapter" data-level="3.5" data-path="r-basics.html"><a href="r-basics.html#assigning-multiple-values"><i class="fa fa-check"></i><b>3.5</b> Assigning multiple values</a><ul>
+<li class="chapter" data-level="3.5.1" data-path="r-basics.html"><a href="r-basics.html#concatenation-a.k.a.-vectors"><i class="fa fa-check"></i><b>3.5.1</b> Concatenation (a.k.a. vectors)</a></li>
+<li class="chapter" data-level="3.5.2" data-path="r-basics.html"><a href="r-basics.html#sequences"><i class="fa fa-check"></i><b>3.5.2</b> Sequences</a></li>
+<li class="chapter" data-level="3.5.3" data-path="r-basics.html"><a href="r-basics.html#vector-arithmatic"><i class="fa fa-check"></i><b>3.5.3</b> Vector Arithmatic</a></li>
+<li class="chapter" data-level="3.5.4" data-path="r-basics.html"><a href="r-basics.html#vector-summaries"><i class="fa fa-check"></i><b>3.5.4</b> Vector Summaries</a></li>
+<li class="chapter" data-level="3.5.5" data-path="r-basics.html"><a href="r-basics.html#ordering-and-manipulating-vectors"><i class="fa fa-check"></i><b>3.5.5</b> Ordering and manipulating vectors</a></li>
+<li class="chapter" data-level="3.5.6" data-path="r-basics.html"><a href="r-basics.html#removing-objects-from-the-workspace"><i class="fa fa-check"></i><b>3.5.6</b> Removing objects from the workspace</a></li>
+</ul></li>
+<li class="chapter" data-level="3.6" data-path="r-basics.html"><a href="r-basics.html#quitting-r"><i class="fa fa-check"></i><b>3.6</b> Quitting R</a></li>
+<li class="chapter" data-level="3.7" data-path="r-basics.html"><a href="r-basics.html#packages"><i class="fa fa-check"></i><b>3.7</b> Packages</a><ul>
+<li class="chapter" data-level="3.7.1" data-path="r-basics.html"><a href="r-basics.html#install-your-first-package"><i class="fa fa-check"></i><b>3.7.1</b> Install your first package</a></li>
+<li class="chapter" data-level="3.7.2" data-path="r-basics.html"><a href="r-basics.html#loading-a-package"><i class="fa fa-check"></i><b>3.7.2</b> Loading a package</a></li>
+</ul></li>
+<li class="chapter" data-level="3.8" data-path="r-basics.html"><a href="r-basics.html#getting-help"><i class="fa fa-check"></i><b>3.8</b> Getting help</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="advanced-coding.html"><a href="advanced-coding.html"><i class="fa fa-check"></i><b>4</b> Advanced coding</a><ul>
+<li class="chapter" data-level="4.1" data-path="advanced-coding.html"><a href="advanced-coding.html#classes-of-data"><i class="fa fa-check"></i><b>4.1</b> Classes of data</a><ul>
+<li class="chapter" data-level="4.1.1" data-path="advanced-coding.html"><a href="advanced-coding.html#numbers"><i class="fa fa-check"></i><b>4.1.1</b> Numbers</a></li>
+<li class="chapter" data-level="4.1.2" data-path="advanced-coding.html"><a href="advanced-coding.html#strings"><i class="fa fa-check"></i><b>4.1.2</b> Strings</a></li>
+<li class="chapter" data-level="4.1.3" data-path="advanced-coding.html"><a href="advanced-coding.html#characters"><i class="fa fa-check"></i><b>4.1.3</b> Characters</a></li>
+<li class="chapter" data-level="4.1.4" data-path="advanced-coding.html"><a href="advanced-coding.html#factors"><i class="fa fa-check"></i><b>4.1.4</b> Factors</a></li>
+<li class="chapter" data-level="4.1.5" data-path="advanced-coding.html"><a href="advanced-coding.html#changing-data-structure"><i class="fa fa-check"></i><b>4.1.5</b> Changing data structure</a></li>
+</ul></li>
+<li class="chapter" data-level="4.2" data-path="advanced-coding.html"><a href="advanced-coding.html#dataframes"><i class="fa fa-check"></i><b>4.2</b> Dataframes</a><ul>
+<li class="chapter" data-level="4.2.1" data-path="advanced-coding.html"><a href="advanced-coding.html#exploring-dataframes"><i class="fa fa-check"></i><b>4.2.1</b> Exploring dataframes</a></li>
+<li class="chapter" data-level="4.2.2" data-path="advanced-coding.html"><a href="advanced-coding.html#numerical-summaries"><i class="fa fa-check"></i><b>4.2.2</b> Numerical Summaries</a></li>
+<li class="chapter" data-level="4.2.3" data-path="advanced-coding.html"><a href="advanced-coding.html#selecting-entries-in-a-dataframe"><i class="fa fa-check"></i><b>4.2.3</b> Selecting entries in a dataframe</a></li>
+<li class="chapter" data-level="4.2.4" data-path="advanced-coding.html"><a href="advanced-coding.html#dplyr-and-data-summaries"><i class="fa fa-check"></i><b>4.2.4</b> dplyr and data summaries</a></li>
+<li class="chapter" data-level="4.2.5" data-path="advanced-coding.html"><a href="advanced-coding.html#merging-dataframes"><i class="fa fa-check"></i><b>4.2.5</b> Merging dataframes</a></li>
+<li class="chapter" data-level="4.2.6" data-path="advanced-coding.html"><a href="advanced-coding.html#exporting-dataframes"><i class="fa fa-check"></i><b>4.2.6</b> Exporting dataframes</a></li>
+</ul></li>
+<li class="chapter" data-level="4.3" data-path="advanced-coding.html"><a href="advanced-coding.html#plots"><i class="fa fa-check"></i><b>4.3</b> Plots</a><ul>
+<li class="chapter" data-level="4.3.1" data-path="advanced-coding.html"><a href="advanced-coding.html#scatter-plots"><i class="fa fa-check"></i><b>4.3.1</b> Scatter plots</a></li>
+<li class="chapter" data-level="4.3.2" data-path="advanced-coding.html"><a href="advanced-coding.html#exporting-graphs"><i class="fa fa-check"></i><b>4.3.2</b> Exporting Graphs</a></li>
+</ul></li>
+<li class="chapter" data-level="4.4" data-path="advanced-coding.html"><a href="advanced-coding.html#merging-columns"><i class="fa fa-check"></i><b>4.4</b> Merging columns</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="real-world-data.html"><a href="real-world-data.html"><i class="fa fa-check"></i><b>5</b> Real world data</a><ul>
+<li class="chapter" data-level="5.1" data-path="real-world-data.html"><a href="real-world-data.html#data-organisation"><i class="fa fa-check"></i><b>5.1</b> Data organisation</a><ul>
+<li class="chapter" data-level="5.1.1" data-path="real-world-data.html"><a href="real-world-data.html#the-10-database-commandments"><i class="fa fa-check"></i><b>5.1.1</b> The 10 database commandments</a></li>
+<li class="chapter" data-level="5.1.2" data-path="real-world-data.html"><a href="real-world-data.html#my-database-setup"><i class="fa fa-check"></i><b>5.1.2</b> My database setup</a></li>
+</ul></li>
+<li class="chapter" data-level="5.2" data-path="real-world-data.html"><a href="real-world-data.html#osa-data"><i class="fa fa-check"></i><b>5.2</b> Osa data</a></li>
+<li class="chapter" data-level="5.3" data-path="real-world-data.html"><a href="real-world-data.html#importing-a-dataframe-into-r-from-excel"><i class="fa fa-check"></i><b>5.3</b> Importing a dataframe into R from excel</a></li>
+<li class="chapter" data-level="5.4" data-path="real-world-data.html"><a href="real-world-data.html#effort-exploration"><i class="fa fa-check"></i><b>5.4</b> Effort exploration</a><ul>
+<li class="chapter" data-level="5.4.1" data-path="real-world-data.html"><a href="real-world-data.html#dealing-with-dates"><i class="fa fa-check"></i><b>5.4.1</b> Dealing with dates</a></li>
+<li class="chapter" data-level="5.4.2" data-path="real-world-data.html"><a href="real-world-data.html#remove-cameras-that-did-not-function"><i class="fa fa-check"></i><b>5.4.2</b> Remove cameras that did not function</a></li>
+</ul></li>
+<li class="chapter" data-level="5.5" data-path="real-world-data.html"><a href="real-world-data.html#covariate-data"><i class="fa fa-check"></i><b>5.5</b> Covariate data</a><ul>
+<li class="chapter" data-level="5.5.1" data-path="real-world-data.html"><a href="real-world-data.html#plotting-your-survey-sites---substr"><i class="fa fa-check"></i><b>5.5.1</b> Plotting your survey sites - Substr()</a></li>
+<li class="chapter" data-level="5.5.2" data-path="real-world-data.html"><a href="real-world-data.html#explore-your-covariates"><i class="fa fa-check"></i><b>5.5.2</b> Explore your covariates</a></li>
+</ul></li>
+<li class="chapter" data-level="5.6" data-path="real-world-data.html"><a href="real-world-data.html#camera-trap-data"><i class="fa fa-check"></i><b>5.6</b> Camera trap data</a><ul>
+<li class="chapter" data-level="5.6.1" data-path="real-world-data.html"><a href="real-world-data.html#subsetting-you-data-to-only-include-species-of-interest."><i class="fa fa-check"></i><b>5.6.1</b> Subsetting you data to only include species of interest.</a></li>
+<li class="chapter" data-level="5.6.2" data-path="real-world-data.html"><a href="real-world-data.html#extracting-time-and-date-information"><i class="fa fa-check"></i><b>5.6.2</b> Extracting time and date information</a></li>
+</ul></li>
+<li class="chapter" data-level="5.7" data-path="real-world-data.html"><a href="real-world-data.html#building-analysis-dataframes"><i class="fa fa-check"></i><b>5.7</b> Building analysis dataframes</a><ul>
+<li class="chapter" data-level="5.7.1" data-path="real-world-data.html"><a href="real-world-data.html#relative-abundance"><i class="fa fa-check"></i><b>5.7.1</b> Relative abundance</a></li>
+<li class="chapter" data-level="5.7.2" data-path="real-world-data.html"><a href="real-world-data.html#step-1-summarise"><i class="fa fa-check"></i><b>5.7.2</b> Step 1: Summarise</a></li>
+<li class="chapter" data-level="5.7.3" data-path="real-world-data.html"><a href="real-world-data.html#step-2-merge-with-effort"><i class="fa fa-check"></i><b>5.7.3</b> Step 2: Merge with effort</a></li>
+<li class="chapter" data-level="5.7.4" data-path="real-world-data.html"><a href="real-world-data.html#step-3-merge-the-covariates"><i class="fa fa-check"></i><b>5.7.4</b> Step 3: Merge the covariates</a></li>
+</ul></li>
+<li class="chapter" data-level="5.8" data-path="real-world-data.html"><a href="real-world-data.html#real-data-exploration"><i class="fa fa-check"></i><b>5.8</b> Real data exploration</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="introduction-to-modelling.html"><a href="introduction-to-modelling.html"><i class="fa fa-check"></i><b>6</b> Introduction to Modelling</a><ul>
+<li class="chapter" data-level="6.1" data-path="introduction-to-modelling.html"><a href="introduction-to-modelling.html#is-canopy-height-related-to-habitat-type-at-osa"><i class="fa fa-check"></i><b>6.1</b> Is canopy height related to habitat type at Osa?</a><ul>
+<li class="chapter" data-level="6.1.1" data-path="introduction-to-modelling.html"><a href="introduction-to-modelling.html#what-is-a-model"><i class="fa fa-check"></i><b>6.1.1</b> What is a model</a></li>
+<li class="chapter" data-level="6.1.2" data-path="introduction-to-modelling.html"><a href="introduction-to-modelling.html#the-p-value"><i class="fa fa-check"></i><b>6.1.2</b> The P-value</a></li>
+</ul></li>
+<li class="chapter" data-level="6.2" data-path="introduction-to-modelling.html"><a href="introduction-to-modelling.html#are-coatis-more-abundant-in-close-proximity-to-the-ocean"><i class="fa fa-check"></i><b>6.2</b> Are Coatis more abundant in close proximity to the ocean</a><ul>
+<li class="chapter" data-level="6.2.1" data-path="introduction-to-modelling.html"><a href="introduction-to-modelling.html#comparing-multiple-predictors-of-coati-detections"><i class="fa fa-check"></i><b>6.2.1</b> Comparing multiple predictors of Coati detections</a></li>
+</ul></li>
+</ul></li>
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">R: an introduction to data management and analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="advanced-coding" class="section level1">
+<h1><span class="header-section-number">4</span> Advanced coding</h1>
+<p>So far we have been dealing with single value scalars or multiple value vectors created in R. But what if you want to start importing and analysing more complicated datasets collected in the field? We first need to learn how to import and analyse our data.</p>
+<div id="classes-of-data" class="section level2">
+<h2><span class="header-section-number">4.1</span> Classes of data</h2>
+<p>Data in R come in two principal flavours: numbers (usually integer or continuous) and strings (uausally characters or factors). They each behave in slightly different ways. It is very important to know when and where to utilise them, and how to convert between them.</p>
+<div id="numbers" class="section level3">
+<h3><span class="header-section-number">4.1.1</span> Numbers</h3>
+<p>A numeric object is any integer (e.g. 7 or -4) or real number (e.g. 3.14). You do not have to do anything special to create a numeric object, if a column contains only numbers it will be classed as numeric.</p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb104-1" title="1">a &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>) <span class="co"># generate a vector of pure numbers</span></a>
+<a class="sourceLine" id="cb104-2" title="2"><span class="kw">class</span>(a) <span class="co"># check the class of the data</span></a></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>Beware! If there are non-numbers in the data to, it will be treated differntly by R. This is a common issue when you import a dataset which contains data entry errors. The column you expected to be classed as numeric is classed as a ‘character’ object.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb106-1" title="1">a &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="st">&quot;f&quot;</span>,<span class="dv">3</span>) <span class="co"># generate a variable with some data</span></a>
+<a class="sourceLine" id="cb106-2" title="2"><span class="kw">class</span>(a) <span class="co"># check the class of the data</span></a></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+</div>
+<div id="strings" class="section level3">
+<h3><span class="header-section-number">4.1.2</span> Strings</h3>
+<p>Strings can take several forms, but the dominant types are characters and factors.</p>
+</div>
+<div id="characters" class="section level3">
+<h3><span class="header-section-number">4.1.3</span> Characters</h3>
+<p>Characters are strings of letters and numbers and can take any unique combinations. They are very flexible, easy to deal with and always require quotation marks "".</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb108-1" title="1">b &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;Dave&quot;</span>, <span class="st">&quot;Brian&quot;</span>, <span class="st">&quot;John&quot;</span>)</a>
+<a class="sourceLine" id="cb108-2" title="2">b </a></code></pre></div>
+<pre><code>## [1] &quot;Dave&quot;  &quot;Brian&quot; &quot;John&quot;</code></pre>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb110-1" title="1"><span class="kw">class</span>(b)</a></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>A very common reason for code failing is forgetting the <code>""</code> quotation marks when referencing a character string. When you do this, R will look for the word you have typed in the global environment - it thinks it is an object! If it isn’t there, it will retun an error:</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb112-1" title="1">c &lt;-<span class="st"> </span><span class="kw">c</span>(Dave, Brian, John) </a></code></pre></div>
+<p>Error: object ‘Dave’ not found</p>
+</div>
+<div id="factors" class="section level3">
+<h3><span class="header-section-number">4.1.4</span> Factors</h3>
+<p>Factors are superficially similar to character strings, but rather than being flexible, they have ordered levels hard-wired into their data structure.</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb113-1" title="1">c &lt;-<span class="st"> </span><span class="kw">factor</span>(<span class="kw">c</span>(<span class="st">&quot;Dave&quot;</span>, <span class="st">&quot;Brian&quot;</span>, <span class="st">&quot;John&quot;</span>))</a>
+<a class="sourceLine" id="cb113-2" title="2">c <span class="co"># Note the &#39;Levels:&#39; output which tells you what values the different factors can take.</span></a></code></pre></div>
+<pre><code>## [1] Dave  Brian John 
+## Levels: Brian Dave John</code></pre>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb115-1" title="1"><span class="kw">class</span>(c)</a></code></pre></div>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<p>You can also find out what the different levels are inside a factor using ‘levels()’</p>
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb117-1" title="1"><span class="kw">levels</span>(c)</a></code></pre></div>
+<pre><code>## [1] &quot;Brian&quot; &quot;Dave&quot;  &quot;John&quot;</code></pre>
+<p>The way to think about factors is as a set of labelled drawers holding the data. The draws are references one to the number of drawers, and if you remove all the data from a given draw, the draw remains in the dataset to be filled again.</p>
+<p>Let me show you this by changing “Brian” to “Dave”:</p>
+<div class="sourceCode" id="cb119"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb119-1" title="1">c[c<span class="op">==</span><span class="st">&quot;Brian&quot;</span>] &lt;-<span class="st"> &quot;Dave&quot;</span></a>
+<a class="sourceLine" id="cb119-2" title="2">c</a></code></pre></div>
+<pre><code>## [1] Dave Dave John
+## Levels: Brian Dave John</code></pre>
+<p>We no longer have a “Brian” in the dataset, but the level “Dave” remains to be used. We can remove an empty level in a set of factors using the <code>factor()</code> commond:</p>
+<div class="sourceCode" id="cb121"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb121-1" title="1">c &lt;-<span class="st"> </span><span class="kw">factor</span>(c)</a>
+<a class="sourceLine" id="cb121-2" title="2">c</a></code></pre></div>
+<pre><code>## [1] Dave Dave John
+## Levels: Dave John</code></pre>
+</div>
+<div id="changing-data-structure" class="section level3">
+<h3><span class="header-section-number">4.1.5</span> Changing data structure</h3>
+<p>There comes a time in every coders life when you need to switch the nature of your data from one type to another. This is easily accomplished by using the ‘as.character()’, ‘as.factor()’, and ‘as.numeric()’ commands.</p>
+<div class="sourceCode" id="cb123"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb123-1" title="1"><span class="co"># Create a numeric vector</span></a>
+<a class="sourceLine" id="cb123-2" title="2">d &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">6</span>,<span class="dv">8</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">5</span>,<span class="dv">6</span>,<span class="dv">7</span>,<span class="dv">8</span>,<span class="dv">5</span>)</a>
+<a class="sourceLine" id="cb123-3" title="3">d <span class="co"># all looks normal</span></a></code></pre></div>
+<pre><code>##  [1] 2 6 8 5 5 5 6 7 8 5</code></pre>
+<div class="sourceCode" id="cb125"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb125-1" title="1"><span class="kw">class</span>(d)</a></code></pre></div>
+<pre><code>## [1] &quot;numeric&quot;</code></pre>
+<p>As expected… it is numeric. Let’s change it to a character string.</p>
+<div class="sourceCode" id="cb127"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb127-1" title="1"><span class="co"># Create a numeric vector</span></a>
+<a class="sourceLine" id="cb127-2" title="2">d &lt;-<span class="st"> </span><span class="kw">as.character</span>(d)</a>
+<a class="sourceLine" id="cb127-3" title="3">d <span class="co"># Note how there are now &quot;&quot;&#39;s around the numbers.</span></a></code></pre></div>
+<pre><code>##  [1] &quot;2&quot; &quot;6&quot; &quot;8&quot; &quot;5&quot; &quot;5&quot; &quot;5&quot; &quot;6&quot; &quot;7&quot; &quot;8&quot; &quot;5&quot;</code></pre>
+<div class="sourceCode" id="cb129"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb129-1" title="1"><span class="kw">class</span>(d)</a></code></pre></div>
+<pre><code>## [1] &quot;character&quot;</code></pre>
+<p>Change it to a factor.</p>
+<div class="sourceCode" id="cb131"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb131-1" title="1"><span class="co"># Create a numeric vector</span></a>
+<a class="sourceLine" id="cb131-2" title="2">d &lt;-<span class="st"> </span><span class="kw">as.factor</span>(d)</a>
+<a class="sourceLine" id="cb131-3" title="3">d <span class="co"># Note how now we have levels!</span></a></code></pre></div>
+<pre><code>##  [1] 2 6 8 5 5 5 6 7 8 5
+## Levels: 2 5 6 7 8</code></pre>
+<div class="sourceCode" id="cb133"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb133-1" title="1"><span class="kw">class</span>(d)</a></code></pre></div>
+<pre><code>## [1] &quot;factor&quot;</code></pre>
+<p>Complete the circle, and change it back to numeric.</p>
+<div class="sourceCode" id="cb135"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb135-1" title="1"><span class="co"># Create a numeric vector</span></a>
+<a class="sourceLine" id="cb135-2" title="2">d &lt;-<span class="st"> </span><span class="kw">as.numeric</span>(d)</a>
+<a class="sourceLine" id="cb135-3" title="3">d <span class="co"># WHAT!!!???!! The numbers have changed.</span></a></code></pre></div>
+<pre><code>##  [1] 1 3 5 2 2 2 3 4 5 2</code></pre>
+<p>Never change a factor to numeric like that. The numbers the values take are the “levels” contained within the factor. <strong>THIS IS WHY YOU SHOULD ALWAYS TROUBLESHOOT YOUR CODE</strong>. If you do need to go from a factor to numeric, always use ‘as.character()’ as an intermediate command first.</p>
+</div>
+</div>
+<div id="dataframes" class="section level2">
+<h2><span class="header-section-number">4.2</span> Dataframes</h2>
+<p>Dataframes sound a little dull… but they are actually powerful two dimensional vector holding structures! They will be the most common way you store data in R. Other ways of storing data exist (e.g. lists, matrices), but I will not discuss them here - just be aware they exist! Dataframes are composed of rows and columns and can contain data of different types (e.g. numeric, character and factor), whereas vectors must always be the same data type.</p>
+<div id="exploring-dataframes" class="section level3">
+<h3><span class="header-section-number">4.2.1</span> Exploring dataframes</h3>
+<p>If you want to become proficient data analysis, you need to become a pro at the exploration and manipulation of dataframes. To do this properly, you will need master a range of different R techniques, from data summarisation to plotting. Tomorrow we will do this on a real dataset. Today, we will keep working on our elephant dataframe.</p>
+<p>Let’s import and examine the structure of the elephant dataframe:</p>
+<div class="sourceCode" id="cb137"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb137-1" title="1">elephant &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;ClassData/Elephant.csv&quot;</span>, <span class="dt">header=</span>T)</a>
+<a class="sourceLine" id="cb137-2" title="2"><span class="kw">head</span>(elephant)</a></code></pre></div>
+<pre><code>##      Name    Sex       Region HomeRange      NDVI TuskLength GroupSize
+## 1    Lisa Female Wonga Wongue    239.32 0.7264260       0.09         2
+## 2    Rosa Female Wonga Wongue    184.35 0.7690821       1.14         7
+## 3  Kengue   Male Wonga Wongue    478.93 0.7737994       1.47         4
+## 4   Mambo   Male Wonga Wongue    279.69 0.7611887       0.30         1
+## 5   David   Male Wonga Wongue   1291.67 0.7954598       1.57         4
+## 6 Mboumba   Male Wonga Wongue   1454.34 0.7614236       2.04         3</code></pre>
+<div class="sourceCode" id="cb139"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb139-1" title="1"><span class="kw">tail</span>(elephant)</a></code></pre></div>
+<pre><code>##       Name    Sex           Region HomeRange      NDVI TuskLength GroupSize
+## 43  Doudou Female Moukalaba Doudou    236.45 0.7743022       1.24         5
+## 44   Dumbo   Male           Loango    205.92 0.7766205       0.66         3
+## 45   Kalie   Male           Loango    119.24 0.8008448       0.47         2
+## 46 Program Female Moukalaba Doudou    333.53 0.8033836       0.52         5
+## 47  Estell Female           Loango    279.70 0.8005697       0.69         2
+## 48  Amelia Female           Ivindo    110.68 0.8048594       0.24         3</code></pre>
+<p>The dataset above contains the results from one year of tracking elephants with GPS collars in Gabon. The dataframe has 7 variables (columns) and each row represents data from an individual elephant.The variables <code>Name</code>, <code>Sex</code> and <code>Region</code> are catagorical. <code>HomeRange</code>, <code>NDVI</code>, <code>TuskLength</code> and `GroupSize`` are continuous.</p>
+</div>
+<div id="numerical-summaries" class="section level3">
+<h3><span class="header-section-number">4.2.2</span> Numerical Summaries</h3>
+<p>The first thing we should do is examine the data structure using ‘str()’</p>
+<div class="sourceCode" id="cb141"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb141-1" title="1"><span class="kw">str</span>(elephant)</a></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    48 obs. of  7 variables:
+##  $ Name      : Factor w/ 48 levels &quot;Abu&quot;,&quot;Amelia&quot;,..: 21 41 17 23 7 26 25 30 31 35 ...
+##  $ Sex       : Factor w/ 2 levels &quot;Female&quot;,&quot;Male&quot;: 1 1 2 2 2 2 2 1 1 2 ...
+##  $ Region    : Factor w/ 4 levels &quot;Ivindo&quot;,&quot;Loango&quot;,..: 4 4 4 4 4 4 4 4 4 4 ...
+##  $ HomeRange : num  239 184 479 280 1292 ...
+##  $ NDVI      : num  0.726 0.769 0.774 0.761 0.795 ...
+##  $ TuskLength: num  0.09 1.14 1.47 0.3 1.57 2.04 0.93 0.68 0.8 0.73 ...
+##  $ GroupSize : int  2 7 4 1 4 3 4 2 3 5 ...</code></pre>
+<p>When we imported the dataframe, R automatically defined the catagorical variables as ‘Factors’ and the continuous variables as numeric (‘num’) or integer (‘int’). There is no practical difference between numeric and integer, just that integers do not have decimal places.</p>
+<p>The ‘str()’ command gives you the number of observations (rows) and variables (columns). We can also extract this information with:</p>
+<div class="sourceCode" id="cb143"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb143-1" title="1"><span class="kw">nrow</span>(elephant) <span class="co"># number of rows</span></a></code></pre></div>
+<pre><code>## [1] 48</code></pre>
+<div class="sourceCode" id="cb145"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb145-1" title="1"><span class="kw">ncol</span>(elephant) <span class="co"># Number of columns</span></a></code></pre></div>
+<pre><code>## [1] 7</code></pre>
+<p>If you want a summary of all of the information in your dataframe, you can use the ‘summary()’ function. For continuous variables you get the mean, median and range of values, for catagorical variables you get the frequency within each category:</p>
+<div class="sourceCode" id="cb147"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb147-1" title="1"><span class="kw">summary</span>(elephant)</a></code></pre></div>
+<pre><code>##            Name        Sex                  Region     HomeRange      
+##  Abu         : 1   Female:26   Ivindo          : 6   Min.   :  16.78  
+##  Amelia      : 1   Male  :22   Loango          :15   1st Qu.: 108.67  
+##  Annabelle_ww: 1               Moukalaba Doudou: 6   Median : 216.58  
+##  Beti        : 1               Wonga Wongue    :21   Mean   : 271.87  
+##  Boniface    : 1                                     3rd Qu.: 301.99  
+##  BraBrou     : 1                                     Max.   :1454.34  
+##  (Other)     :42                                                      
+##       NDVI          TuskLength       GroupSize    
+##  Min.   :0.7053   Min.   :0.0700   Min.   : 1.00  
+##  1st Qu.:0.7748   1st Qu.:0.4075   1st Qu.: 2.00  
+##  Median :0.7878   Median :0.6700   Median : 3.00  
+##  Mean   :0.7892   Mean   :0.7000   Mean   : 3.75  
+##  3rd Qu.:0.8073   3rd Qu.:0.8850   3rd Qu.: 5.00  
+##  Max.   :0.8493   Max.   :2.0400   Max.   :12.00  
+##  NA&#39;s   :1</code></pre>
+</div>
+<div id="selecting-entries-in-a-dataframe" class="section level3">
+<h3><span class="header-section-number">4.2.3</span> Selecting entries in a dataframe</h3>
+<div id="columns" class="section level4">
+<h4><span class="header-section-number">4.2.3.1</span> Columns</h4>
+<p>To select a single column you must provide its <strong>full address</strong>. The name of the data frame is the ‘city’ (in this case <code>elephant</code>), the column name is the street. You link them with the ‘$’ sign.</p>
+<div class="sourceCode" id="cb149"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb149-1" title="1">elephant<span class="op">$</span>Name</a></code></pre></div>
+<pre><code>##  [1] Lisa         Rosa         Kengue       Mambo        David       
+##  [6] Mboumba      Mba          Nana         Ndeka        Nze         
+## [11] Wongo        Stam         Junior       Ponogo       Larouille   
+## [16] Nongo        Orembo       Tonda        BraBrou      Malaika     
+## [21] Boniface     Ekare        Marijo       Janice       Rose_Loango 
+## [26] Abu          Mpemba       Keva         Ta_a         Tonnere     
+## [31] Kigali       Onero        Izouwa       Nzamba       Annabelle_ww
+## [36] Ngele        Moukalaba    Dedi         Penelope     Megane      
+## [41] Beti         Stephanie    Doudou       Dumbo        Kalie       
+## [46] Program      Estell       Amelia      
+## 48 Levels: Abu Amelia Annabelle_ww Beti Boniface BraBrou David Dedi ... Wongo</code></pre>
+<p>R studio is very helpful and provides you with column title hints after you have typed the ‘$’ sign, but even so, you should always keep your column titles small in order to save time and keep your code looking clean.</p>
+<p><img src="Figures/hints.png" width="250px" /></p>
+</div>
+<div id="the-cordinate-method" class="section level4">
+<h4><span class="header-section-number">4.2.3.2</span> The cordinate method</h4>
+<p>You can also select elements from dataframes using their coordinates (also known as indexing or subscripting). To do this you use the [ ] square brackets. Again you must specify the address (the data frame), then the rows (x) and/or column (y) coordinates. <strong>dataframe[row.number, column.number]</strong></p>
+<p>For example, to extract the 2nd row’s 3rd element:</p>
+<div class="sourceCode" id="cb151"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb151-1" title="1">elephant[<span class="dv">2</span>,<span class="dv">3</span>] <span class="co">#coordinate method</span></a></code></pre></div>
+<pre><code>## [1] Wonga Wongue
+## Levels: Ivindo Loango Moukalaba Doudou Wonga Wongue</code></pre>
+<p>You can select the whole row by leaving the column argument blank.</p>
+<div class="sourceCode" id="cb153"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb153-1" title="1">elephant[<span class="dv">2</span>,] <span class="co">#just the 2nd row</span></a></code></pre></div>
+<pre><code>##   Name    Sex       Region HomeRange      NDVI TuskLength GroupSize
+## 2 Rosa Female Wonga Wongue    184.35 0.7690821       1.14         7</code></pre>
+<p>Or select the whole column by leaving the row argument blank.</p>
+<div class="sourceCode" id="cb155"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb155-1" title="1">elephant[,<span class="dv">3</span>] <span class="co"># just the third column</span></a></code></pre></div>
+<pre><code>##  [1] Wonga Wongue     Wonga Wongue     Wonga Wongue     Wonga Wongue    
+##  [5] Wonga Wongue     Wonga Wongue     Wonga Wongue     Wonga Wongue    
+##  [9] Wonga Wongue     Wonga Wongue     Wonga Wongue     Wonga Wongue    
+## [13] Loango           Loango           Ivindo           Wonga Wongue    
+## [17] Loango           Loango           Wonga Wongue     Wonga Wongue    
+## [21] Loango           Loango           Ivindo           Ivindo          
+## [25] Loango           Loango           Loango           Loango          
+## [29] Ivindo           Wonga Wongue     Wonga Wongue     Loango          
+## [33] Loango           Ivindo           Wonga Wongue     Wonga Wongue    
+## [37] Moukalaba Doudou Moukalaba Doudou Moukalaba Doudou Moukalaba Doudou
+## [41] Wonga Wongue     Wonga Wongue     Moukalaba Doudou Loango          
+## [45] Loango           Moukalaba Doudou Loango           Ivindo          
+## Levels: Ivindo Loango Moukalaba Doudou Wonga Wongue</code></pre>
+<p>If you want to extract more than one column and row you can use supply vectors:</p>
+<div class="sourceCode" id="cb157"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb157-1" title="1">elephant[<span class="kw">c</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>),<span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">5</span>)]</a></code></pre></div>
+<pre><code>##     Name       Region      NDVI
+## 1   Lisa Wonga Wongue 0.7264260
+## 2   Rosa Wonga Wongue 0.7690821
+## 3 Kengue Wonga Wongue 0.7737994</code></pre>
+</div>
+<div id="the-logic-method" class="section level4">
+<h4><span class="header-section-number">4.2.3.3</span> The logic method</h4>
+<p>One of the most powerful ways to extract data in R is to use logical statements. For example, let’s subset the data to only include males:</p>
+<div class="sourceCode" id="cb159"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb159-1" title="1">elephant[elephant<span class="op">$</span>Sex<span class="op">==</span><span class="st">&quot;Male&quot;</span>,] <span class="co"># subset to just males. Remember that leaving a blank </span></a></code></pre></div>
+<pre><code>##         Name  Sex       Region HomeRange      NDVI TuskLength GroupSize
+## 3     Kengue Male Wonga Wongue    478.93 0.7737994       1.47         4
+## 4      Mambo Male Wonga Wongue    279.69 0.7611887       0.30         1
+## 5      David Male Wonga Wongue   1291.67 0.7954598       1.57         4
+## 6    Mboumba Male Wonga Wongue   1454.34 0.7614236       2.04         3
+## 7        Mba Male Wonga Wongue    152.61 0.7627158       0.93         4
+## 10       Nze Male Wonga Wongue    505.67        NA       0.73         5
+## 11     Wongo Male Wonga Wongue    297.24 0.8040024       0.60         7
+## 13    Junior Male       Loango     64.70 0.8300000       0.58         3
+## 15 Larouille Male       Ivindo    101.05 0.7856077       0.08         6
+## 17    Orembo Male       Loango    329.86 0.8085495       0.74         2
+## 19   BraBrou Male Wonga Wongue    227.24 0.7614054       0.44         9
+## 21  Boniface Male       Loango    231.81 0.7876408       0.82         2
+## 22     Ekare Male       Loango     39.71 0.7936707       0.29         1
+## 26       Abu Male       Loango    697.46 0.7877630       1.08         2
+## 29      Ta_a Male       Ivindo     75.67 0.7052599       0.64         8
+## 30   Tonnere Male Wonga Wongue    800.60 0.8131276       1.34         2
+## 31    Kigali Male Wonga Wongue    237.10 0.8070265       0.76         3
+## 32     Onero Male       Loango     89.94 0.8205471       0.40         2
+## 34    Nzamba Male       Ivindo    256.60 0.7803319       1.23         6
+## 41      Beti Male Wonga Wongue    300.54 0.7418243       0.85         1
+## 44     Dumbo Male       Loango    205.92 0.7766205       0.66         3
+## 45     Kalie Male       Loango    119.24 0.8008448       0.47         2</code></pre>
+<div class="sourceCode" id="cb161"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb161-1" title="1">                                <span class="co"># space after the , returns all columns</span></a></code></pre></div>
+<p>Let’s subset the data to only include elephants with home ranges greater than 500km2:</p>
+<div class="sourceCode" id="cb162"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb162-1" title="1">elephant[elephant<span class="op">$</span>HomeRange<span class="op">&gt;</span><span class="dv">500</span>,] <span class="co"># Home range greater than 500</span></a></code></pre></div>
+<pre><code>##       Name  Sex       Region HomeRange      NDVI TuskLength GroupSize
+## 5    David Male Wonga Wongue   1291.67 0.7954598       1.57         4
+## 6  Mboumba Male Wonga Wongue   1454.34 0.7614236       2.04         3
+## 10     Nze Male Wonga Wongue    505.67        NA       0.73         5
+## 26     Abu Male       Loango    697.46 0.7877630       1.08         2
+## 30 Tonnere Male Wonga Wongue    800.60 0.8131276       1.34         2</code></pre>
+<p>You can link multiple logic statements together with the ‘&amp;’ sign. Extract elephants with homeranges greater than 500km2 <em>AND</em> tusks over 1.5m:</p>
+<div class="sourceCode" id="cb164"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb164-1" title="1"><span class="co"># Home range greater than 500 and tusk length  great than 1.5</span></a>
+<a class="sourceLine" id="cb164-2" title="2">elephant[elephant<span class="op">$</span>HomeRange<span class="op">&gt;</span><span class="dv">500</span> <span class="op">&amp;</span><span class="st"> </span>elephant<span class="op">$</span>TuskLength<span class="op">&gt;</span><span class="fl">1.5</span>,]</a></code></pre></div>
+<pre><code>##      Name  Sex       Region HomeRange      NDVI TuskLength GroupSize
+## 5   David Male Wonga Wongue   1291.67 0.7954598       1.57         4
+## 6 Mboumba Male Wonga Wongue   1454.34 0.7614236       2.04         3</code></pre>
+<p>If we want to extract elephants with tusks great than 2 meters <strong>or</strong> less than 0.5 meters? Easy! Use the or ‘|’ operation:</p>
+<div class="sourceCode" id="cb166"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb166-1" title="1"><span class="co"># elephants with tusks greate than two meters, or less than 0.5 meters.</span></a>
+<a class="sourceLine" id="cb166-2" title="2">elephant[elephant<span class="op">$</span>TuskLength<span class="op">&lt;</span><span class="fl">0.2</span> <span class="op">|</span><span class="st"> </span>elephant<span class="op">$</span>TuskLength<span class="op">&gt;</span><span class="fl">1.5</span>,]</a></code></pre></div>
+<pre><code>##            Name    Sex       Region HomeRange      NDVI TuskLength GroupSize
+## 1          Lisa Female Wonga Wongue    239.32 0.7264260       0.09         2
+## 5         David   Male Wonga Wongue   1291.67 0.7954598       1.57         4
+## 6       Mboumba   Male Wonga Wongue   1454.34 0.7614236       2.04         3
+## 15    Larouille   Male       Ivindo    101.05 0.7856077       0.08         6
+## 28         Keva Female       Loango     49.69 0.8300000       0.11         3
+## 35 Annabelle_ww Female Wonga Wongue     16.78 0.8076506       0.07         2</code></pre>
+<p>The ‘%in%’ operation helps you to easily extract data based on multiple OR arguments. Imagine you have a list of elephants that you know were poached, and you want to subset the data to only view those.</p>
+<div class="sourceCode" id="cb168"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb168-1" title="1">poached &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;David&quot;</span>, <span class="st">&quot;BraBrou&quot;</span>, <span class="st">&quot;Ekare&quot;</span>) <span class="co"># create a vector of poached elephants</span></a>
+<a class="sourceLine" id="cb168-2" title="2">elephant[elephant<span class="op">$</span>Name <span class="op">%in%</span><span class="st"> </span>poached,] <span class="co"># subset using %in%</span></a></code></pre></div>
+<pre><code>##       Name  Sex       Region HomeRange      NDVI TuskLength GroupSize
+## 5    David Male Wonga Wongue   1291.67 0.7954598       1.57         4
+## 19 BraBrou Male Wonga Wongue    227.24 0.7614054       0.44         9
+## 22   Ekare Male       Loango     39.71 0.7936707       0.29         1</code></pre>
+<div class="sourceCode" id="cb170"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb170-1" title="1"><span class="co"># Return all rows where elephant name matches the names in poached</span></a>
+<a class="sourceLine" id="cb170-2" title="2"></a>
+<a class="sourceLine" id="cb170-3" title="3">alive_elephants &lt;-<span class="st"> </span>elephant[<span class="op">!</span>elephant<span class="op">$</span>Name <span class="op">%in%</span><span class="st"> </span>poached,]</a></code></pre></div>
+<p><strong><em>TASK 6</em></strong>
+<strong><em>Extract the data for female elephants in Wonga wongue.</em></strong></p>
+</div>
+</div>
+<div id="dplyr-and-data-summaries" class="section level3">
+<h3><span class="header-section-number">4.2.4</span> dplyr and data summaries</h3>
+<p>So far we have just used functions contained in base R, but the package <code>dplyr</code> within the <code>tidyverse</code> (more on this later) has a lot to offer.</p>
+<div class="sourceCode" id="cb171"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb171-1" title="1"><span class="kw">library</span>(dplyr) <span class="co"># Load the dplyr package</span></a></code></pre></div>
+<p>First we will summarise home range and tusk length by park using the summarize function:</p>
+<div class="sourceCode" id="cb172"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb172-1" title="1"><span class="kw">summarize</span>(<span class="kw">group_by</span>(elephant, Region), <span class="co"># this says calculate the following using the </span></a>
+<a class="sourceLine" id="cb172-2" title="2">                                      <span class="co"># elephants dataframe, split by region </span></a>
+<a class="sourceLine" id="cb172-3" title="3">          <span class="dt">Individuals=</span><span class="kw">n</span>(),            <span class="co"># give the number of individuals </span></a>
+<a class="sourceLine" id="cb172-4" title="4">          <span class="dt">Avg.Area=</span><span class="kw">mean</span>(HomeRange),   <span class="co"># average Home range</span></a>
+<a class="sourceLine" id="cb172-5" title="5">          <span class="dt">Avg.Tusk=</span><span class="kw">mean</span>(TuskLength))  <span class="co"># average tusk length</span></a></code></pre></div>
+<pre><code>## # A tibble: 4 x 4
+##   Region           Individuals Avg.Area Avg.Tusk
+##   &lt;fct&gt;                  &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Ivindo                     6     158.    0.587
+## 2 Loango                    15     198.    0.589
+## 3 Moukalaba Doudou           6     252.    0.732
+## 4 Wonga Wongue              21     363.    0.802</code></pre>
+<p>We can add increase the number of summary subdivisions easily too:</p>
+<div class="sourceCode" id="cb174"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb174-1" title="1"><span class="kw">summarize</span>(<span class="kw">group_by</span>(elephant, Region, Sex), <span class="co"># this says calculate the following using the </span></a>
+<a class="sourceLine" id="cb174-2" title="2">                                           <span class="co"># elephants dataframe, split by region </span></a>
+<a class="sourceLine" id="cb174-3" title="3">          <span class="dt">Observations=</span><span class="kw">n</span>(),<span class="co">#give the number of Observations in each group </span></a>
+<a class="sourceLine" id="cb174-4" title="4">          <span class="dt">Avg.Area=</span><span class="kw">mean</span>(HomeRange), <span class="co">#average Home range</span></a>
+<a class="sourceLine" id="cb174-5" title="5">          <span class="dt">Avg.Tusk=</span><span class="kw">mean</span>(TuskLength)) <span class="co">#average tusk length</span></a></code></pre></div>
+<pre><code>## # A tibble: 7 x 5
+## # Groups:   Region [4]
+##   Region           Sex    Observations Avg.Area Avg.Tusk
+##   &lt;fct&gt;            &lt;fct&gt;         &lt;int&gt;    &lt;dbl&gt;    &lt;dbl&gt;
+## 1 Ivindo           Female            3     171.    0.523
+## 2 Ivindo           Male              3     144.    0.65 
+## 3 Loango           Female            7     169.    0.543
+## 4 Loango           Male              8     222.    0.63 
+## 5 Moukalaba Doudou Female            6     252.    0.732
+## 6 Wonga Wongue     Female           10     160.    0.582
+## 7 Wonga Wongue     Male             11     548.    1.00</code></pre>
+<p>###TASK 7###
+###Summarize group size by region###</p>
+<div id="dealing-with-nas" class="section level4">
+<h4><span class="header-section-number">4.2.4.1</span> Dealing with NA’s</h4>
+<p>Try to find the average NDVI score across all elephants:</p>
+<div class="sourceCode" id="cb176"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb176-1" title="1"><span class="kw">mean</span>(elephant<span class="op">$</span>NDVI)</a></code></pre></div>
+<pre><code>## [1] NA</code></pre>
+<p>Whaaat?! <strong>R is broken…</strong> Not really. One of our elephants is missing an NDVI score. This is very common in real world data where the complexities of life sometimes get in the way of data collection. NA’s often sneak under the radar in datasets (particularly if you analse data with 1000’s of observations).</p>
+<p>You can easily adjust the <code>mean()</code> command to ignore NA’s:</p>
+<div class="sourceCode" id="cb178"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb178-1" title="1"><span class="kw">mean</span>(elephant<span class="op">$</span>NDVI, <span class="dt">na.rm=</span>T)</a></code></pre></div>
+<pre><code>## [1] 0.7891777</code></pre>
+<p>However, what if you want to find the problem and correct it? Or remove it completely? We can try to use logic like in the previous examples:</p>
+<div class="sourceCode" id="cb180"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb180-1" title="1">elephant[elephant<span class="op">$</span>NDVI<span class="op">==</span><span class="st">&quot;NA&quot;</span>,] <span class="co"># Subset the data where the NDVI score is NA</span></a></code></pre></div>
+<pre><code>##    Name  Sex Region HomeRange NDVI TuskLength GroupSize
+## NA &lt;NA&gt; &lt;NA&gt;   &lt;NA&gt;        NA   NA         NA        NA</code></pre>
+<p>That didn’t work. NA’s do not behave like normal data. You need to use the logical statement ‘is.na()’ to evaluate NA’s. First lets look at what is.na() does:</p>
+<div class="sourceCode" id="cb182"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb182-1" title="1"><span class="kw">is.na</span>(elephant<span class="op">$</span>NDVI) <span class="co"># what is.na does</span></a></code></pre></div>
+<pre><code>##  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE  TRUE FALSE FALSE
+## [13] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [25] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+## [37] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</code></pre>
+<p>It produces a vector of true and false statements, if NDVI is not an NA it returns ‘FALSE’, if NDVI is an NA it returns ‘TRUE’. We can use this information to make our selection!</p>
+<div class="sourceCode" id="cb184"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb184-1" title="1">elephant[<span class="kw">is.na</span>(elephant<span class="op">$</span>NDVI)<span class="op">==</span><span class="ot">TRUE</span>,]</a></code></pre></div>
+<pre><code>##    Name  Sex       Region HomeRange NDVI TuskLength GroupSize
+## 10  Nze Male Wonga Wongue    505.67   NA       0.73         5</code></pre>
+<p>Now we see the real data!</p>
+<p>Remove the NA from the dataset:</p>
+<div class="sourceCode" id="cb186"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb186-1" title="1">elephant &lt;-<span class="st"> </span>elephant[<span class="kw">is.na</span>(elephant<span class="op">$</span>NDVI)<span class="op">==</span><span class="ot">FALSE</span>,] <span class="co"># subset the data where is.na() is false.</span></a></code></pre></div>
+<p>In summary, NA’s behave strangely, but dont get flustered by them. You just need to be vigilent and know how to deal with them.</p>
+</div>
+</div>
+<div id="merging-dataframes" class="section level3">
+<h3><span class="header-section-number">4.2.5</span> Merging dataframes</h3>
+<p>Taking data from one source and merging it with another source is a fundamental step in performing data analysis. For example, you have collected lots of biodiversity data in the field and you want to merge it with some covariate data exported from ArcGIS.</p>
+<p>In this case, your elephant project collaborators have just provided you with data on the disease status of the individuals in your data set, and you need to add it to your dataframe.</p>
+<p>***Import the <code>disease</code> dataframe.</p>
+<div class="sourceCode" id="cb187"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb187-1" title="1">ele.dis &lt;-<span class="st"> </span><span class="kw">read.csv</span>(<span class="st">&quot;ClassData/Elephant.disease.csv&quot;</span>, <span class="dt">header=</span>T)</a></code></pre></div>
+<p>###TASK 8###
+*** Explore the new dataframe with the <code>str()</code> and <code>head()</code> functions. What can you tell me about it?***</p>
+<p>In the past you might have opened the two files in excel and copied the data over… but what if the data are in different orders, have repeated individuals, or there are 1000’s of rows? It would be a nightmare! We can do something much simplier in the <code>dplyr</code> package - a left join. <code>Left_join()</code> takes two datasheets and merges them using a common key (in this case <code>Name</code>), to add any columns from the right hand side (<code>ele.dis</code>) not present on the left hand side (<code>elephant</code>).</p>
+<div class="sourceCode" id="cb188"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb188-1" title="1"><span class="co"># First load the package</span></a>
+<a class="sourceLine" id="cb188-2" title="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb188-3" title="3">new.ele &lt;-<span class="st"> </span><span class="kw">left_join</span>(elephant, ele.dis, <span class="dt">by=</span><span class="st">&quot;Name&quot;</span>) <span class="co"># by specifies the key</span></a>
+<a class="sourceLine" id="cb188-4" title="4"><span class="kw">head</span>(new.ele)</a></code></pre></div>
+<pre><code>##      Name    Sex       Region HomeRange      NDVI TuskLength GroupSize
+## 1    Lisa Female Wonga Wongue    239.32 0.7264260       0.09         2
+## 2    Rosa Female Wonga Wongue    184.35 0.7690821       1.14         7
+## 3  Kengue   Male Wonga Wongue    478.93 0.7737994       1.47         4
+## 4   Mambo   Male Wonga Wongue    279.69 0.7611887       0.30         1
+## 5   David   Male Wonga Wongue   1291.67 0.7954598       1.57         4
+## 6 Mboumba   Male Wonga Wongue   1454.34 0.7614236       2.04         3
+##   Nematodes Abcess  Injury Disease
+## 1    absent absent present    TRUE
+## 2    absent absent  absent   FALSE
+## 3    absent absent  absent   FALSE
+## 4    absent absent present    TRUE
+## 5    absent absent present    TRUE
+## 6    absent absent present    TRUE</code></pre>
+<p><strong><em>Always check the output is sensible</em></strong></p>
+<p>Magic! There are other types of joins you can use, but this is the one which I use most frequently. For more ideas check out <a href="http://stat545.com/bit001_dplyr-cheatsheet.html" class="uri">http://stat545.com/bit001_dplyr-cheatsheet.html</a></p>
+</div>
+<div id="exporting-dataframes" class="section level3">
+<h3><span class="header-section-number">4.2.6</span> Exporting dataframes</h3>
+<p>Take the updated elephant dataset you have just produced and use the <code>write.csv()</code> command. The arguments contained are <code>write.csv(object, "name.csv", row.names=F)</code></p>
+<p>If you do not use a file in your write csv() the file will turn up in the project directory. However you can write it to any folder on your computer using a file path.</p>
+<div class="sourceCode" id="cb190"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb190-1" title="1"><span class="kw">write.csv</span>(new.ele, <span class="st">&quot;C:/Program Files/Home Range and Disease.csv&quot;</span>, <span class="dt">row.names=</span>F)</a></code></pre></div>
+</div>
+</div>
+<div id="plots" class="section level2">
+<h2><span class="header-section-number">4.3</span> Plots</h2>
+<p>Summarising your data, either numerically or graphically, is an important (if often overlooked) component of any data analyses. Fortunately, R has excellent graphics capabilities! It can be used when you want to produce plots for initial data exploration, model validation or highly complex publication quality graphs.</p>
+<p>If you can imagine a graph… you can plot it in R! Consequently it would be impossible to go through all possible combinations here. This will simply serve as a primer.</p>
+<div id="scatter-plots" class="section level3">
+<h3><span class="header-section-number">4.3.1</span> Scatter plots</h3>
+<p>The most common function used to produce graphs in R is the plot() function. The simplest plot is a single variable plot - e.g. elephant home ranges:</p>
+<div class="sourceCode" id="cb191"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb191-1" title="1"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange)</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-110-1.png" width="384" /></p>
+<p>Here, R has plotted home range size on the y axis and an index (1 to the length of the dataframe) on the x axis, plotted in the order at which they occur in the data.</p>
+<p>We can provide a second continuous variable (a scatter plot) with the following:</p>
+<div class="sourceCode" id="cb192"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb192-1" title="1"><span class="co"># You can use plot(x,y) or plot(y~x), they produce the same result.</span></a>
+<a class="sourceLine" id="cb192-2" title="2"><span class="co">#plot(elephant$HomeRange~ elephant$NDVI) # Will give the same result</span></a>
+<a class="sourceLine" id="cb192-3" title="3"><span class="kw">plot</span>(elephant<span class="op">$</span>NDVI,elephant<span class="op">$</span>HomeRange) <span class="co"># Scatter plot of two continuous variables</span></a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-111-1.png" width="384" /></p>
+<p>You can also specify the type of graph you wish to plot using the option type=””. For example, you can plot just the points (type=”p”), lines (type=”l”), both points and lines connected (type=”b”) and both points and lines with the lines running through the points (type=”o”).</p>
+<div class="sourceCode" id="cb193"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb193-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)) <span class="co"># allow a plot with four windows</span></a>
+<a class="sourceLine" id="cb193-2" title="2"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange, <span class="dt">type=</span><span class="st">&quot;p&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Points&quot;</span>)</a>
+<a class="sourceLine" id="cb193-3" title="3"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange, <span class="dt">type=</span><span class="st">&quot;l&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Lines&quot;</span>)</a>
+<a class="sourceLine" id="cb193-4" title="4"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange, <span class="dt">type=</span><span class="st">&quot;b&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Points and lines 1&quot;</span>)</a>
+<a class="sourceLine" id="cb193-5" title="5"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange, <span class="dt">type=</span><span class="st">&quot;o&quot;</span>, <span class="dt">main=</span><span class="st">&quot;Points and lines 2&quot;</span>)</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-112-1.png" width="576" /></p>
+<div id="histograms" class="section level4">
+<h4><span class="header-section-number">4.3.1.1</span> Histograms</h4>
+<p>The hist() function allows you to draw a histogram of a variable in order to gain an impression of its frequency distribution. To plot a histogram of height.</p>
+<div class="sourceCode" id="cb194"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb194-1" title="1"><span class="kw">hist</span>(elephant<span class="op">$</span>NDVI, <span class="dt">main=</span> <span class="st">&quot;Histogram of NDVI score&quot;</span>) <span class="co">#default histogram</span></a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-113-1.png" width="384" /></p>
+<p>You can manually change the number of breaks in a histogram by supplying a sequence spanning the range of the variable of interest.</p>
+<div class="sourceCode" id="cb195"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb195-1" title="1">brks &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="fl">0.5</span>,<span class="dv">1</span>,<span class="fl">0.02</span>) <span class="co"># This sets the break width</span></a>
+<a class="sourceLine" id="cb195-2" title="2"><span class="kw">hist</span>(elephant<span class="op">$</span>NDVI, <span class="dt">breaks=</span>brks,  </a>
+<a class="sourceLine" id="cb195-3" title="3">     <span class="dt">main=</span> <span class="st">&quot;Histogram of NDVI score&quot;</span>)</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-114-1.png" width="384" /></p>
+</div>
+<div id="boxplots" class="section level4">
+<h4><span class="header-section-number">4.3.1.2</span> Boxplots</h4>
+<p>Boxplots are useful for exploring how a continuous covariate is related to a catagorical covariates. They are specified as ‘boxplot(continuous~catagorical)’. **Note* you have to use the ~ with boxplots or you get weird results.</p>
+<div class="sourceCode" id="cb196"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb196-1" title="1"><span class="kw">boxplot</span>(elephant<span class="op">$</span>TuskLength<span class="op">~</span>elephant<span class="op">$</span>Sex, <span class="dt">ylab=</span><span class="st">&quot;Tusk Length (m)&quot;</span>) <span class="co"># ylab controls the axis labels</span></a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-115-1.png" width="288" /></p>
+<p>To interpret a box plot: The cental black bar = median, the upper and lower edges are the 25% and 75% quartiles, the whiskers are 1.5 the interquartile range, circles beyond the whiskers denote values &gt; 1.5 times the interquartile range from the median (sometimes callled outliers).</p>
+<p>Use ‘?boxplot’ to see all of the different boxplot cutomisation options.</p>
+<div class="sourceCode" id="cb197"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb197-1" title="1">?boxplot <span class="co"># use the help call</span></a>
+<a class="sourceLine" id="cb197-2" title="2"><span class="co">#wow there are lots of things to change!</span></a></code></pre></div>
+</div>
+<div id="correlation-plots" class="section level4">
+<h4><span class="header-section-number">4.3.1.3</span> Correlation plots</h4>
+<p>When analysing data sets with large numbers of continuous variables, it is often important to determine whether any of them are related to one another. Plotting multivariate data in excel is a nightmare, but it is very easy to do in R using the ‘pairs()’ function.</p>
+<div class="sourceCode" id="cb198"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb198-1" title="1"><span class="kw">pairs</span>(elephant[,<span class="dv">3</span><span class="op">:</span><span class="dv">7</span>], <span class="co"># specifies the panels you wish to plot </span></a>
+<a class="sourceLine" id="cb198-2" title="2">      <span class="dt">panel =</span> panel.smooth) <span class="co"># adds a smoothed average line to </span></a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-117-1.png" width="672" /></p>
+<div class="sourceCode" id="cb199"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb199-1" title="1">                            <span class="co"># help you understand the relationship</span></a></code></pre></div>
+<p>These plots take a while to get used to but are very useful! You can see home range and NDVI are positively correlated. Note - catagorical covariates are treated as numeric (look at region), and are therefore of limited use in these plots.</p>
+<p>When we get into linear modelling we will see that we cannot include two variables in a model if they are correlated, as one of the assumptions of linear modelling is that all explanatory variables are independent. For this reason, correlation plots are very important.</p>
+<p>To explore this we can use the ‘corrplot’ package. In this plot, correlation coefficients are calculated and colored according to the degree of correlation (red=negative corellation, blue=positive correlation, white = uncorrelated).</p>
+<div class="sourceCode" id="cb200"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb200-1" title="1"><span class="kw">library</span>(corrplot) <span class="co"># Install corrplot</span></a>
+<a class="sourceLine" id="cb200-2" title="2"></a>
+<a class="sourceLine" id="cb200-3" title="3"><span class="co"># First you need to determine the correlations between the variables</span></a>
+<a class="sourceLine" id="cb200-4" title="4">correlations &lt;-<span class="st"> </span><span class="kw">cor</span>(elephant[,<span class="dv">4</span><span class="op">:</span><span class="dv">7</span>])</a>
+<a class="sourceLine" id="cb200-5" title="5"></a>
+<a class="sourceLine" id="cb200-6" title="6"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb200-7" title="7"><span class="co"># make the plot - Number method</span></a>
+<a class="sourceLine" id="cb200-8" title="8"><span class="kw">corrplot</span>(correlations, </a>
+<a class="sourceLine" id="cb200-9" title="9">         <span class="dt">type=</span><span class="st">&quot;upper&quot;</span>, </a>
+<a class="sourceLine" id="cb200-10" title="10">         <span class="dt">method=</span><span class="st">&quot;number&quot;</span>)</a>
+<a class="sourceLine" id="cb200-11" title="11"></a>
+<a class="sourceLine" id="cb200-12" title="12"><span class="kw">corrplot</span>(correlations, </a>
+<a class="sourceLine" id="cb200-13" title="13">         <span class="dt">type=</span><span class="st">&quot;upper&quot;</span>, </a>
+<a class="sourceLine" id="cb200-14" title="14">         <span class="dt">method=</span><span class="st">&quot;circle&quot;</span>)</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-119-1.png" width="672" /></p>
+<p>Checkout <a href="http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram" class="uri">http://www.sthda.com/english/wiki/visualize-correlation-matrix-using-correlogram</a> for more options!</p>
+</div>
+<div id="re-formatting-plots-like-a-pro" class="section level4">
+<h4><span class="header-section-number">4.3.1.4</span> Re-formatting plots like a pro</h4>
+<p>All the graphs presented so far are suitable for data exploration. If however, you would like to make them a little prettier (for publications and reports) you can change many of the default settings to get them exactly the way you want.</p>
+<p>Lets revisit the default home range vs. tusk length plot (left), and compare it to a nicely formatted graph (right).</p>
+<p><img src="_main_files/figure-html/unnamed-chunk-120-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Lets break down the plot command step by step:</p>
+<div class="sourceCode" id="cb201"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb201-1" title="1"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange<span class="op">~</span>elephant<span class="op">$</span>TuskLength, <span class="co"># Your data </span></a>
+<a class="sourceLine" id="cb201-2" title="2">     <span class="dt">main=</span><span class="st">&quot;Nice plot&quot;</span>,                       <span class="co"># main = allows you to add a title</span></a>
+<a class="sourceLine" id="cb201-3" title="3">     <span class="dt">pch=</span><span class="dv">19</span>,                                 <span class="co"># Changes the plotting symbols</span></a>
+<a class="sourceLine" id="cb201-4" title="4">     <span class="dt">cex=</span><span class="fl">1.2</span>,                                <span class="co"># Changes the size of points</span></a>
+<a class="sourceLine" id="cb201-5" title="5">     <span class="dt">col =</span><span class="st">&quot;black&quot;</span>                            <span class="co"># The border colour</span></a>
+<a class="sourceLine" id="cb201-6" title="6">     <span class="dt">bg=</span><span class="st">&quot;darkslategray3&quot;</span>,                    <span class="co"># The fill colour </span></a>
+<a class="sourceLine" id="cb201-7" title="7">     <span class="dt">ylab=</span><span class="st">&quot;Home range km2&quot;</span>,                  <span class="co"># ylab = y axis label</span></a>
+<a class="sourceLine" id="cb201-8" title="8">     <span class="dt">xlab=</span><span class="st">&quot;Tusk length (cm)&quot;</span>,                <span class="co"># xlab controls the x axis label</span></a>
+<a class="sourceLine" id="cb201-9" title="9">     <span class="dt">xaxt=</span><span class="st">&quot;n&quot;</span>,                               <span class="co"># xaxt=&quot;n&quot;, suppresses the xaxis - so we can </span></a>
+<a class="sourceLine" id="cb201-10" title="10">                                             <span class="co">#                             plot a new one</span></a>
+<a class="sourceLine" id="cb201-11" title="11">     <span class="dt">las=</span><span class="dv">1</span>,                                  <span class="co"># Rotates The Y axis labels</span></a>
+<a class="sourceLine" id="cb201-12" title="12">     </a>
+<a class="sourceLine" id="cb201-13" title="13">     <span class="dt">ylim=</span><span class="kw">c</span>(<span class="dv">0</span>,<span class="dv">1500</span>),                         <span class="co"># Changes the y axis limits   </span></a>
+<a class="sourceLine" id="cb201-14" title="14">     <span class="dt">xlim=</span><span class="kw">c</span>(<span class="op">-</span><span class="fl">0.2</span>,<span class="fl">2.2</span>),                       <span class="co"># Changes the x-axis limits</span></a>
+<a class="sourceLine" id="cb201-15" title="15">     </a>
+<a class="sourceLine" id="cb201-16" title="16">     )</a>
+<a class="sourceLine" id="cb201-17" title="17"></a>
+<a class="sourceLine" id="cb201-18" title="18"><span class="kw">axis</span>(<span class="dv">1</span>, <span class="dt">at=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="fl">0.5</span>), <span class="dt">labels=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">200</span>,<span class="dv">50</span>))<span class="co"># Adds back in the x-axis with the </span></a>
+<a class="sourceLine" id="cb201-19" title="19">                                              <span class="co">#  corrected labels</span></a></code></pre></div>
+<p>There is a lot going… lets break it down further!</p>
+<div id="colours-and-shapes" class="section level5">
+<h5><span class="header-section-number">4.3.1.4.1</span> Colours and shapes</h5>
+<p>Most plotting functions have a color argument (usually <code>col()</code>) that allows you to specify the color of whatever your plotting. There are many ways to specify colors in R, but easiest way to specify a color is to enter its name as a string. For example <code>col = "red"</code> is R’s red color. Of course, all the basic colors are there, but R also has tons of quirky colors like <code>"snow"</code>, <code>"papayawhip"</code> and <code>"lawngreen"</code>. There are some examples below:</p>
+<p><img src="Figures/Colour%20block.png" width="60%" style="display: block; margin: auto;" /></p>
+<p>I my personal fave is <code>"darkslategray3"</code>.</p>
+<p>The way R controls plotting symbols is with the <code>pch=</code> command. There are a of different options to choose from depending on what you want to do.</p>
+<p><img src="Figures/pch%20commands.png" width="30%" style="display: block; margin: auto;" /></p>
+<p>My go to is <code>pch=19</code>. You get a set of nice filled circles… but you might be different! Play with some variation below. Try your own!</p>
+<div class="sourceCode" id="cb202"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb202-1" title="1"><span class="co"># Example code</span></a>
+<a class="sourceLine" id="cb202-2" title="2"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange<span class="op">~</span>elephant<span class="op">$</span>TuskLength,</a>
+<a class="sourceLine" id="cb202-3" title="3">     <span class="dt">pch=</span><span class="dv">16</span>, </a>
+<a class="sourceLine" id="cb202-4" title="4">     <span class="dt">col=</span><span class="st">&quot;darkslategray3&quot;</span>)</a></code></pre></div>
+<p><strong><em>TASK 9</em></strong>
+<strong><em>Make your own customised graphs</em></strong></p>
+<p><img src="_main_files/figure-html/unnamed-chunk-125-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Do you want more control? Check out <a href="https://data.library.virginia.edu/setting-up-color-palettes-in-r/" class="uri">https://data.library.virginia.edu/setting-up-color-palettes-in-r/</a></p>
+</div>
+</div>
+<div id="size" class="section level4">
+<h4><span class="header-section-number">4.3.1.5</span> Size</h4>
+<p>The size of the symbols is controlled by <code>cex=</code>. The size you choose is highly dependent on the the amount of data you have - the more data you have the smaller your symbols need to be.</p>
+<div class="sourceCode" id="cb203"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb203-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb203-2" title="2"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange<span class="op">~</span>elephant<span class="op">$</span>TuskLength,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&quot;darkslategray3&quot;</span>,</a>
+<a class="sourceLine" id="cb203-3" title="3">     <span class="dt">cex=</span><span class="fl">0.5</span>, <span class="dt">main=</span><span class="st">&quot;cex=0.5&quot;</span>)</a>
+<a class="sourceLine" id="cb203-4" title="4"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange<span class="op">~</span>elephant<span class="op">$</span>TuskLength,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&quot;darkslategray3&quot;</span>,</a>
+<a class="sourceLine" id="cb203-5" title="5">     <span class="dt">cex=</span><span class="fl">2.5</span>, <span class="dt">main=</span><span class="st">&quot;cex=2.5&quot;</span>)</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-126-1.png" width="672" /></p>
+</div>
+<div id="labels-and-axes" class="section level4">
+<h4><span class="header-section-number">4.3.1.6</span> Labels and axes</h4>
+<p>The default plot in R leaves you with ugly axis labels. I use a few basic commands to improve these plots. The first of which is <code>las=1</code> which rotates the y-axis labels to horizontal. <code>ylab=</code> and <code>xlab=</code> always need changing to something sensible. <code>main=</code> can be used to add a plot title.</p>
+<div class="sourceCode" id="cb204"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb204-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</a>
+<a class="sourceLine" id="cb204-2" title="2"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange<span class="op">~</span>elephant<span class="op">$</span>TuskLength,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&quot;darkslategray3&quot;</span>, <span class="dt">main=</span> <span class="st">&quot;Default&quot;</span>)</a>
+<a class="sourceLine" id="cb204-3" title="3"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange<span class="op">~</span>elephant<span class="op">$</span>TuskLength,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&quot;darkslategray3&quot;</span>, <span class="dt">main=</span> <span class="st">&quot;Improved&quot;</span>,</a>
+<a class="sourceLine" id="cb204-4" title="4">     <span class="dt">las=</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb204-5" title="5">     <span class="dt">xlab=</span><span class="st">&quot;Tusk length(m)&quot;</span>,</a>
+<a class="sourceLine" id="cb204-6" title="6">     <span class="dt">ylab=</span><span class="st">&quot;Home range km2&quot;</span> )</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-127-1.png" width="672" /></p>
+<p>Finally, there are times when you might need to control the format of the axes themselves - such as where you place the ‘tick marks’ and what units the axes are in. In the initial example, I converted tusk length from meters in centimeters. Here is how:</p>
+<p>First you must supress the x-axis with <code>xaxt="n"</code>, then add back in the axis with the <code>axis()</code> function. The key commands it contains are:</p>
+<p><code>axis(side, at=, labels=)</code>.</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Command</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">side</td>
+<td align="left">an integer indicating the side of the graph to draw the axis (1=bottom, 2=left, 3=top, 4=right)</td>
+</tr>
+<tr class="even">
+<td align="left">at</td>
+<td align="left">a numeric vector indicating where tic marks should be drawn</td>
+</tr>
+<tr class="odd">
+<td align="left">labels</td>
+<td align="left">a character vector of labels to be placed at the tickmarks (if NULL, the at values will be used)</td>
+</tr>
+</tbody>
+</table>
+<p>I am editing the x axis (1), and I want the tick marks to be at 0, 0.5, 1, 1.5, 2 -&gt; <code>seq(0,2,0.5)</code> and finally I want to change those to be labels of 0, 50, 100, 150, 200 -&gt; <code>seq(0,200,50)</code></p>
+<div class="sourceCode" id="cb205"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb205-1" title="1"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange<span class="op">~</span>elephant<span class="op">$</span>TuskLength,<span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&quot;darkslategray3&quot;</span>, </a>
+<a class="sourceLine" id="cb205-2" title="2">     <span class="dt">main=</span> <span class="st">&quot;&quot;</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">xlab=</span><span class="st">&quot;Tusk length(cm)&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Home range km2&quot;</span>,</a>
+<a class="sourceLine" id="cb205-3" title="3">     <span class="dt">xaxt=</span><span class="st">&quot;n&quot;</span>) <span class="co"># Supress the x!</span></a>
+<a class="sourceLine" id="cb205-4" title="4"></a>
+<a class="sourceLine" id="cb205-5" title="5"><span class="kw">axis</span>(<span class="dv">1</span>,                     <span class="co"># x-axis</span></a>
+<a class="sourceLine" id="cb205-6" title="6">     <span class="dt">at=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">2</span>,<span class="fl">0.5</span>),       <span class="co"># Where I want my ticks</span></a>
+<a class="sourceLine" id="cb205-7" title="7">     <span class="dt">labels=</span><span class="kw">seq</span>(<span class="dv">0</span>,<span class="dv">200</span>,<span class="dv">50</span>))  <span class="co"># What I want the labels to be</span></a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-129-1.png" width="384" /></p>
+</div>
+<div id="starting-from-scratch" class="section level4">
+<h4><span class="header-section-number">4.3.1.7</span> Starting from scratch</h4>
+<p>Eventually you will want to make a plot so complicated you will have to start from scratch (a blank plot). To create a blank plot you should use the <code>type="n"</code> command in your plot call.</p>
+<div class="sourceCode" id="cb206"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb206-1" title="1"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange<span class="op">~</span>elephant<span class="op">$</span>TuskLength,</a>
+<a class="sourceLine" id="cb206-2" title="2">     <span class="dt">pch=</span><span class="dv">16</span>,<span class="dt">col=</span><span class="st">&quot;darkslategray3&quot;</span>, <span class="dt">las=</span><span class="dv">1</span>, <span class="dt">xlab=</span><span class="st">&quot;Tusk length(m)&quot;</span>, <span class="dt">ylab=</span><span class="st">&quot;Home range km2&quot;</span>,</a>
+<a class="sourceLine" id="cb206-3" title="3">     <span class="dt">type=</span><span class="st">&quot;n&quot;</span>)    <span class="co"># This makes the plot blank!</span></a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-130-1.png" width="384" /></p>
+<p>Scary huh!</p>
+<p>Now you must use your newly aquired subsetting and plot colouring skills to add in the data points for males in blue, and females in red. You can add datapoints using the <code>points()</code> command.</p>
+<div class="sourceCode" id="cb207"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb207-1" title="1"><span class="co"># First, subset the data</span></a>
+<a class="sourceLine" id="cb207-2" title="2">males   &lt;-<span class="st"> </span>elephant[elephant<span class="op">$</span>Sex<span class="op">==</span><span class="st">&quot;Male&quot;</span>,] <span class="co"># Return all male rows</span></a>
+<a class="sourceLine" id="cb207-3" title="3">females &lt;-<span class="st"> </span>elephant[elephant<span class="op">$</span>Sex<span class="op">==</span><span class="st">&quot;Female&quot;</span>,] <span class="co"># return all female rows</span></a>
+<a class="sourceLine" id="cb207-4" title="4"> </a>
+<a class="sourceLine" id="cb207-5" title="5"><span class="co"># Add the males points</span></a>
+<a class="sourceLine" id="cb207-6" title="6"><span class="kw">points</span>(males<span class="op">$</span>HomeRange<span class="op">~</span><span class="st"> </span>males<span class="op">$</span>TuskLength,</a>
+<a class="sourceLine" id="cb207-7" title="7">       <span class="dt">pch=</span><span class="dv">19</span>,</a>
+<a class="sourceLine" id="cb207-8" title="8">       <span class="dt">col=</span><span class="st">&quot;lightskyblue&quot;</span>)</a>
+<a class="sourceLine" id="cb207-9" title="9"></a>
+<a class="sourceLine" id="cb207-10" title="10"><span class="kw">points</span>(females<span class="op">$</span>HomeRange<span class="op">~</span><span class="st"> </span>females<span class="op">$</span>TuskLength,</a>
+<a class="sourceLine" id="cb207-11" title="11">       <span class="dt">pch=</span><span class="dv">17</span>,</a>
+<a class="sourceLine" id="cb207-12" title="12">       <span class="dt">col=</span><span class="st">&quot;orchid&quot;</span>)</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-132-1.png" width="384" /></p>
+<p><strong><em>TASK 10</em></strong>
+<strong><em>Repeat the above graph but change the point type based on elephant region</em></strong></p>
+</div>
+<div id="multiple-graphs" class="section level4">
+<h4><span class="header-section-number">4.3.1.8</span> Multiple graphs</h4>
+<p>The key to publishable quality graphs is the ability to plot multiple graphs in one window. To start doing this you need to master the <code>par(mfrow=c(rows,columns))</code> command. With this method, you have to specify the number of rows and columns you would like. For example, to plot two graphs side by side then you would use:</p>
+<div class="sourceCode" id="cb208"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb208-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">2</span>)) <span class="co">#1 row, 2 columns</span></a>
+<a class="sourceLine" id="cb208-2" title="2"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange)</a>
+<a class="sourceLine" id="cb208-3" title="3"><span class="kw">plot</span>(elephant<span class="op">$</span>TuskLength)</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-133-1.png" width="576" /></p>
+<p>For a 2 x 2 block of graphs:</p>
+<div class="sourceCode" id="cb209"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb209-1" title="1"><span class="kw">par</span>(<span class="dt">mfrow=</span><span class="kw">c</span>(<span class="dv">2</span>,<span class="dv">2</span>)) <span class="co"># Two rows two columns</span></a>
+<a class="sourceLine" id="cb209-2" title="2"><span class="kw">plot</span>(elephant<span class="op">$</span>HomeRange)</a>
+<a class="sourceLine" id="cb209-3" title="3"><span class="kw">plot</span>(elephant<span class="op">$</span>TuskLength)</a>
+<a class="sourceLine" id="cb209-4" title="4"><span class="kw">plot</span>(elephant<span class="op">$</span>NDVI)</a>
+<a class="sourceLine" id="cb209-5" title="5"><span class="kw">plot</span>(elephant<span class="op">$</span>GroupSize)</a></code></pre></div>
+<p><img src="_main_files/figure-html/unnamed-chunk-134-1.png" width="576" /></p>
+<p>We have just breifly touched on the possibilites of changing the <code>mar()</code> command here. If you want to know more check out</p>
+</div>
+</div>
+<div id="exporting-graphs" class="section level3">
+<h3><span class="header-section-number">4.3.2</span> Exporting Graphs</h3>
+<p>The easiest way to export a graph from R to word or powerpoint is using the ‘Export’ button in the ‘Plots’ tab.</p>
+<p><img src="Figures/Export.png" width="50%" /></p>
+<p>For the most professional way of exporting graphs (using pre-defined dimensions) see <a href="https://www.datamentor.io/r-programming/saving-plot/" class="uri">https://www.datamentor.io/r-programming/saving-plot/</a></p>
+</div>
+</div>
+<div id="merging-columns" class="section level2">
+<h2><span class="header-section-number">4.4</span> Merging columns</h2>
+<p>Sometimes you will want to merge the data from two columns, to make a new column - e.g. if you want to create a unique ID column from sites and plot numbers. Lets make a quick fake dataset and use the <code>paste0()</code> function.</p>
+<div class="sourceCode" id="cb210"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb210-1" title="1"><span class="co"># Make a data frame</span></a>
+<a class="sourceLine" id="cb210-2" title="2">newdat &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">Site=</span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;A&quot;</span>,<span class="st">&quot;B&quot;</span>,<span class="st">&quot;C&quot;</span>), <span class="dt">each=</span><span class="dv">3</span>), <span class="dt">Plot=</span><span class="kw">rep</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">times=</span><span class="dv">3</span>), <span class="dt">Height=</span><span class="kw">rnorm</span>(<span class="dv">9</span>))</a>
+<a class="sourceLine" id="cb210-3" title="3"></a>
+<a class="sourceLine" id="cb210-4" title="4"><span class="co"># Merge the site and the plot columns, separate them with a dot, and make a new &quot;unique&quot; column.</span></a>
+<a class="sourceLine" id="cb210-5" title="5">newdat<span class="op">$</span>Unique &lt;-<span class="st"> </span><span class="kw">paste0</span>(newdat<span class="op">$</span>Site,<span class="st">&quot;.&quot;</span>, newdat<span class="op">$</span>Plot)</a>
+<a class="sourceLine" id="cb210-6" title="6"><span class="kw">head</span>(newdat)</a></code></pre></div>
+<pre><code>##   Site Plot      Height Unique
+## 1    A    1 -0.09789359    A.1
+## 2    A    2  0.86957194    A.2
+## 3    A    3 -1.91181359    A.3
+## 4    B    1  0.23422536    B.1
+## 5    B    2 -0.46368194    B.2
+## 6    B    3 -0.70522084    B.3</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="r-basics.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="real-world-data.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": null,
+"text": null
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["_main.pdf"],
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
