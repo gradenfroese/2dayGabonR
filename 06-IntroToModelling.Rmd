@@ -102,7 +102,7 @@ First, let's import our relative abundance index dataset from earlier ()
 
 ```{r}
 # Read in the dataframe
-count.sp <- read.csv("SpeciesRAIdata.csv", header=T)
+count.sp <- read.csv("RawData/SpeciesRAIdata.csv", header=T)
 
 # Subset the data to just coatis
 coati <- count.sp[count.sp$Code=="coati",]
@@ -230,7 +230,7 @@ library(vegan)
 library(ggbiplot)
 
 # Read in the dataframe
-count.mat <- read.csv("SpeciesMATRIXdata.csv", header=T)
+count.mat <- read.csv("RawData/SpeciesMATRIXdata.csv", header=T)
 
 # make the data 
 pca.dat <- left_join(count.mat, covariates) # join with covariates

@@ -620,8 +620,8 @@ count.mat <- dcast(count.sp, Station  ~ Code,value.var ="Count", fun.aggregate=s
 Save the count.sp dataset for later.
 
 ```{r}
-write.csv(count.sp, "SpeciesRAIdata.csv", row.names=F)
-write.csv(count.mat, "SpeciesMATRIXdata.csv", row.names=F)
+write.csv(count.sp, "RawData/SpeciesRAIdata.csv", row.names=F)
+write.csv(count.mat, "RawData/SpeciesMATRIXdata.csv", row.names=F)
 
 ```
 
