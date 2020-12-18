@@ -1,5 +1,5 @@
-# 3dayR
-My three day R course 
+# 2dayR
+Grady's 2 day R course
 
 ## Structure and to do list
 
@@ -15,7 +15,7 @@ My three day R course
  - Update data frame manipulation -> to dplyr
 	
 #### L4 - Real world data
-  	[WHAT WOULD YOUR EXAMPLE BE?]
+ - WHAT WOULD YOUR EXAMPLE BE?
 
 #### L5 
  - Spatial ?
