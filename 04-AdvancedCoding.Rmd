@@ -121,7 +121,9 @@ If you want to become proficient data analysis, you need to become a pro at the 
 Let's import and examine the structure of the elephant dataframe:
 
 ```{r}
-elephant <- read.csv("ClassData/Elephant.csv", header=T)
+library(dplyr)
+elephant <- read.csv("ClassData/Elephant.csv", header=T) %>% 
+  mutate_if(is.character,funs(factor(.)))
 head(elephant)
 tail(elephant)
 ```
