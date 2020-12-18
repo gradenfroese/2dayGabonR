@@ -17,5 +17,5 @@ Grady's 2 day R course
 #### L4 - Real world data
  - WHAT WOULD YOUR EXAMPLE BE?
 
-#### L5 
+#### L5 - BLOW THEIR MINDS
  - Spatial ?
